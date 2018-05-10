@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Results from './Results.js';
+import Result from './Result.js';
 import './Results.css'
 const youtubeSearch = require('youtube-search');
 
@@ -11,8 +11,8 @@ const opts = {
 };
 
 class Search extends Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       results: [],
       hasSearch: false,
@@ -20,6 +20,7 @@ class Search extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handler = this.handler.bind(this);
   }
 
   handleChange(e) {
@@ -42,33 +43,46 @@ class Search extends Component {
     else this.setState({hasSearch:false});
   }
 
-  render() {
-    var element = <p>No songs found.</p>;
-    if(this.state.results.length>0) element = (<Results results = {this.state.results}/>)
-    else if(!this.state.hasSearch) element = (<p></p>)
-    return (
-      <div className="Search">
-        <form>
-        <input
-          type="text"
-          onKeyPress={e => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              this.handleSubmit(e);
-          }}}
-          placeholder="Make a Suggestion...."
-          value ={this.state.search}
-          onChange={this.handleChange}
-          onSubmit={this.handleSubmit}
-        />
-        <button onClick={this.handleSubmit}> Search </button>
-        </form>
-        <div className="search-results">
-          {element}
-        </div>
-      </div>
-    );
+  handler(e){
+    this.setState({search:'', results:[], hasSearch:false});
   }
-}
 
-export default Search;
+  getResults(){
+    const options = this.state.results.map(r => (
+      <li>
+        <Result key={r.id} handler={this.handler} result={r} room={this.props.room}/>
+      </li>
+    ));
+    return <ul>{options}</ul>;
+  }
+
+    render() {
+      var element = <p>No songs found.</p>;
+        if(this.state.results.length>0) element = this.getResults();
+          else if(!this.state.hasSearch) element = null;
+          return (
+            <div className="Search">
+              <form>
+                <input
+                  type="text"
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      this.handleSubmit(e);
+                    }}}
+                    placeholder="Make a Suggestion...."
+                    value ={this.state.search}
+                    onChange={this.handleChange}
+                    onSubmit={this.handleSubmit}
+                    />
+                  <button onClick={this.handleSubmit}> Search </button>
+                </form>
+                <div className="search-results">
+                  {element}
+                </div>
+              </div>
+            );
+          }
+        }
+
+        export default Search;

@@ -3,22 +3,33 @@ import React, {Component} from 'react';
 class Result extends Component{
   constructor(props){
     super(props);
-    this.state = {
-      result: props.result,
-    }
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(){
     //add song to suggesitons db
-
+    fetch('/api/addsong', {
+      method: "POST",
+      body: { id: this.props.result.id,
+              body: this.props.result,
+              playlist: this.props.room
+            }
+    }).then(function(response){
+      return response.json();
+    }).then(function(json){
+      console.log(json);
+    }).catch(function(err){
+      console.error(err.message);
+    });
+    this.props.handler();
   }
 
   render(){
     return (
-      <div className="Result">
-      <img src={this.state.result.thumbnails.default.url} alt={this.state.result.id} className="thumb" height="40" width="40"/>
-        <h4>{this.state.result.title}</h4>
-        <p1>{this.state.result.description}</p1>
+      <div className="Result" key={this.props.result.id}>
+      <img src={this.props.result.thumbnails.default.url} alt={this.props.result.id} className="thumb" height="40" width="40"/>
+        <h4>{this.props.result.title}</h4>
+        <p1>{this.props.result.description}</p1>
         <br/>
         <button onClick={this.handleSubmit}>Suggest</button>
       </div>

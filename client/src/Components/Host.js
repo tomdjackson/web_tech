@@ -8,7 +8,6 @@ class Host extends Component{
     this.state = {
       value: 0,
       code: '',
-      currentRoom: '',
       newRoom: '',
       rooms: []
     }
@@ -16,6 +15,31 @@ class Host extends Component{
     this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
     this.handleDeleteChange = this.handleDeleteChange.bind(this);
     this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
+    this.getCode();
+  }
+
+  getCode(){
+    this.callPartyApi()
+        .then(res=>this.setState({code: res.code}))
+        .catch(err => console.log(err));
+  }
+
+  callPartyApi = async () => {
+    const response = await fetch('/api/createparty');
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
+
+  callPlaylistAPI= async () => {
+    const response = await fetch('/api/createplaylist', {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({name: this.state.newRoom, code: this.state.code})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
   }
 
   handleCreateChange(e){
@@ -33,26 +57,50 @@ class Host extends Component{
       if(!this.state.rooms.includes(this.state.newRoom)){
         var newRoomArray = this.state.rooms;
         newRoomArray.push(this.state.newRoom);
-        this.setState({currentRoom: this.state.newRoom, rooms: newRoomArray, newRoom: ''});
+        this.callPlaylistAPI()
+            .then(res=>console.log(res.message))
+            .catch(err=>console.log(err));
+        this.setState({newRoom: '', rooms: newRoomArray});
       }
       else console.log("room already exists");
     }
     else console.log("no input");
   }
 
+  deletePlaylistApi = async () => {
+    var i = this.state.value - 1;
+    console.log(i);
+    var room = this.state.rooms[i];
+    console.log(room);
+    const response = await fetch('/api/deleteplaylist', {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({name: room})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
+
   handleDeleteSubmit(e){
     e.preventDefault();
     var newRoomArray = this.state.rooms;
     if(this.state.value>0){
-      newRoomArray.splice(this.state.value-1, 1);
+      var i = this.state.value -1;
+      newRoomArray.splice(i, 1);
+      this.deletePlaylistApi()
+          .then(res=>console.log(res.message))
+          .catch(err=>console.log(err));
+      this.setState({value: 0, rooms: newRoomArray});
     }
-    this.setState({rooms: newRoomArray, value:0});
+
   }
 
   render(){
     return (
       <div className='Host'>
-      <h3> Your unique party code is: </h3> <br/>
+      <h3> Your unique party code is: </h3>
+      <h2> {this.state.code} </h2> <br/>
       <form>
       <label>
       Create a Room: <br/>
