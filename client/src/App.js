@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import logo from './logo.svg'; //TODO make a new logo
+import logo from './logo.svg';
+import boogie from './boogie.png';
+import ballot from './ballot.png';
 import Host from './Components/Host.js'
 import Guest from './Components/Guest.js'
 import ('./App.css');
@@ -36,8 +38,9 @@ class App extends Component {
       <MuiThemeProvider>
       <div className="App">
       <header className="App-header">
+      <img src={boogie} className="App-logo-boogie" alt="boogie" />
       <img src={logo} className="App-logo" alt="logo" />
-      <h1 className="App-title">Boogie Ballot</h1>
+      <img src={ballot} className="App-logo-ballot" alt="ballot" />
       </header>
       {component}
       </div>
