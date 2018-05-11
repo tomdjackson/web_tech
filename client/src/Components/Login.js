@@ -34,8 +34,7 @@ class Login extends Component {
       this.callAPI()
           .then(res=> {
             if(res.exists){
-              console.log("Party Exists");
-              this.props.loginHandler(this.state.code);
+              this.props.loginHandler(this.state.code, this.state.name);
             }
             else {
               console.log("Party doesn't exist.");

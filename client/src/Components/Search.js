@@ -21,6 +21,7 @@ class Search extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handler = this.handler.bind(this);
+    this.getResults = this.getResults.bind(this);
   }
 
   handleChange(e) {
@@ -59,7 +60,7 @@ class Search extends Component {
     render() {
       var element = <p>No songs found.</p>;
         if(this.state.results.length>0) element = this.getResults();
-          else if(!this.state.hasSearch) element = null;
+        else if(!this.state.hasSearch) element = null;
           return (
             <div className="Search">
               <form>

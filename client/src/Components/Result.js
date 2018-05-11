@@ -10,14 +10,17 @@ class Result extends Component{
     //add song to suggesitons db
     fetch('/api/addsong', {
       method: "POST",
-      body: { id: this.props.result.id,
-              body: this.props.result,
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ id: this.props.result.id,
+              title: this.props.result.title,
+              link: this.props.result.link,
+              thumbnail: this.props.result.thumbnails.default.url,
               playlist: this.props.room
-            }
+            })
     }).then(function(response){
       return response.json();
-    }).then(function(json){
-      console.log(json);
+    }).then(function(res){
+      console.log(res.message);
     }).catch(function(err){
       console.error(err.message);
     });
@@ -27,7 +30,7 @@ class Result extends Component{
   render(){
     return (
       <div className="Result" key={this.props.result.id}>
-      <img src={this.props.result.thumbnails.default.url} alt={this.props.result.id} className="thumb" height="40" width="40"/>
+        <img src={this.props.result.thumbnails.default.url} alt={this.props.result.id} className="thumb" height="40" width="40"/>
         <h4>{this.props.result.title}</h4>
         <p1>{this.props.result.description}</p1>
         <br/>

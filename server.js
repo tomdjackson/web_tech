@@ -27,7 +27,7 @@ db.run("CREATE TABLE IF NOT EXISTS parties (key TEXT, user TEXT)", (err) => {
 db.run("CREATE TABLE IF NOT EXISTS playlists (key TEXT, party_id TEXT, FOREIGN KEY (party_id) REFERENCES party(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
   if(err) return console.error(err.message);
 });
-db.run("CREATE TABLE IF NOT EXISTS songs (key TEXT, body VARCHAR, votes INT, playlist_id TEXT, FOREIGN KEY (playlist_id) REFERENCES playlist(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
+db.run("CREATE TABLE IF NOT EXISTS songs (key TEXT, title TEXT, link TEXT, thumbnail TEXT, votes INT, playlist_id TEXT, FOREIGN KEY (playlist_id) REFERENCES playlist(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
   if(err) return console.error(err.message);
 });
 
@@ -55,25 +55,27 @@ app.post('/api/createplaylist', (req, res) => {
 });
 
 app.post('/api/checkparty', (req,res) => {
-  console.log(req.body.code);
-  db.run("SELECT EXISTS(SELECT 1 FROM parties WHERE key = ?", req.body.code + " LIMIT 1)", (err, ans) =>{
+  db.run("SELECT EXISTS(SELECT 1 FROM parties WHERE key =? LIMIT 1)", req.body.code, (err, ans) =>{
+    if(err) return console.error(err.message);
     if(ans=1) res.send({exists: true});
     else res.send({exists: false});
   });
 });
 
 app.post('/api/deleteplaylist', (req, res) =>{
-  console.log(req.body.name);
   db.run("DELETE FROM playlists WHERE key=?", req.body.name, (err)=>{
     if(err) return console.error(err.message);
   });
-  res.send({message: "Room" + req.body.name + " deleted."});
+  res.send({message: "Room " + req.body.name + " deleted."});
 });
 
 app.post('/api/addsong', (req, res) =>{
-  db.run("INSERT INTO songs VALUES(?,?,?,?)", [req.body.id, req.body.body, 0, req.body.playlist], (err)=>{
+  //TODO check if song already exists in the playlist
+  //TODO Should the ID be the song id + the playlist id to make it unique?
+  db.run("INSERT INTO songs (key, title, link, thumbnail, votes, playlist_id) VALUES(?,?,?,?,?,?)", [req.body.id, req.body.title, req.body.link, req.body.thumbnail, 0, req.body.playlist], (err)=>{
     if(err) return console.error(err.message);
   });
+  res.send({message: "added " + req.body.id});
 });
 
 app.post('/api/getplaylists', (req, res)=>{
@@ -84,8 +86,41 @@ app.post('/api/getplaylists', (req, res)=>{
 });
 
 app.post('/api/getsongs', (req, res) =>{
-  db.all("SELECT body FROM songs WHERE playlist_id =?", req.body.code, (err, rows)=>{
+  console.log("here");
+  db.all("SELECT * FROM songs WHERE playlist_id=?", req.body.playlist, (err, rows)=>{
     if(err) return console.error(err.message);
-    res.send({rooms: rows});
+    res.send({songs: rows});
   });
+});
+
+app.post('/api/upvote', (req, res) => {
+  //TODO increment/decrement votes
+  //TODO if > 3 add to playlist
+  var votes=0;
+  db.run("SELECT votes FROM songs WHERE key=?", req.body.key, (err, value)=>{
+    if(err) return console.error(err.message);
+    console.log(value);
+    votes = value;
+  });
+  votes++;
+  db.run("UPDATE songs SET votes=? WHERE key=?", [votes, req.body.key], (err)=>{
+    if(err) return console.error(err.message);
+  });
+  res.send({message: req.body.key + " upvoted. Votes = " + votes});
+});
+
+app.post('/api/downvote', (req, res) => {
+  //TODO increment/decrement votes
+  //TODO if <= -5 remove suggestion
+  var votes=0;
+  db.run("SELECT votes FROM songs WHERE key=?", req.body.key, (err, v)=>{
+    if(err) return console.error(err.message);
+    console.log(v);
+    votes = v;
+  });
+  votes--;
+  db.run("UPDATE songs SET votes=? WHERE key=?", [votes, req.body.key], (err)=>{
+    if(err) return console.error(err.message);
+  });
+  res.send({message: req.body.key + " downvoted. Votes = "+votes});
 });

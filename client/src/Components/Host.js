@@ -69,9 +69,7 @@ class Host extends Component{
 
   deletePlaylistApi = async () => {
     var i = this.state.value - 1;
-    console.log(i);
     var room = this.state.rooms[i];
-    console.log(room);
     const response = await fetch('/api/deleteplaylist', {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -86,11 +84,11 @@ class Host extends Component{
     e.preventDefault();
     var newRoomArray = this.state.rooms;
     if(this.state.value>0){
-      var i = this.state.value -1;
-      newRoomArray.splice(i, 1);
       this.deletePlaylistApi()
           .then(res=>console.log(res.message))
           .catch(err=>console.log(err));
+      var i = this.state.value - 1;
+      newRoomArray.splice(i, 1);
       this.setState({value: 0, rooms: newRoomArray});
     }
 

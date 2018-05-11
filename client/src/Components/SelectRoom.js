@@ -6,7 +6,6 @@ class SelectRoom extends Component{
   constructor(props){
     super(props);
     this.state = {
-      rooms: this.props.rooms,
       value: 0,
     }
     this.handleChange = this.handleChange.bind(this);
@@ -14,9 +13,7 @@ class SelectRoom extends Component{
 
   handleChange(e, i, v){
     this.setState({value: v});
-    if(v>0) {
-      this.props.handler(v);
-    }
+    this.props.handler(v);
   }
 
   render(){
