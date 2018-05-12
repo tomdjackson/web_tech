@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Form, ButtonToolbar, Col, ControlLabel, Checkbox, FormGroup, FormControl, Button } from 'react-bootstrap';
 
 class Login extends Component {
   constructor(props){
@@ -82,44 +83,66 @@ class Login extends Component {
     };
   }
 
+  getValidationState(l) {
+    if (l > 7) return 'success';
+    else if (l > 0) return 'error';
+    return null;
+  }
+
   render() {
     const errors = this.validate(this.state.username, this.state.password);
+    const centreStyled = { maxWidth: 400, margin: '0 auto 10px' }
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     const showError = (field) =>{
       const hasError = errors[field];
       const shouldShow = this.state.touched[field];
       return hasError ? shouldShow: false;
     }
-
     return (
-      <div className="login">
+      <div className="login" style={centreStyled}>
         <h2> Login as a Host </h2>
-        <form>
-          <input
-            className ={showError('username') ? "error":""}
-            type="text"
-            placeholder="Username..."
-            value={this.state.username}
-            name = "username"
-            onChange={this.handleChange}
-            onSubmit={this.handleLoginSubmit}
-            onBlur={this.handleBlur('username')}
-            />
-          <br/>
-          <input
-            className ={showError('password') ? "error":""}
-            type="password"
-            placeholder="Password..."
-            value={this.state.password}
-            name = "password"
-            onChange={this.handleChange}
-            onSubmit={this.handleLoginSubmit}
-            onBlur={this.handleBlur('password')}
-            />
-          <br/>
-          <button disabled={isDisabled} onClick={this.handleLoginSubmit}> Login </button>
-          <button disabled={isDisabled} onClick={this.handleRegisterSubmit}> Register </button>
-        </form>
+        <Form horizontal>
+          <FormGroup controlId="formHorizontalUsername" >
+            <Col sm={12}>
+              <FormControl
+                className ={showError('username') ? "error":""}
+                bsSize="small"
+                type="text"
+                placeholder="Username..."
+                value={this.state.username}
+                name = "username"
+                onChange={this.handleChange}
+                onSubmit={this.handleLoginSubmit}
+                onBlur={this.handleBlur('username')} 
+              />
+            </Col>
+          </FormGroup>
+
+          <FormGroup controlId="formHorizontalPassword" validationState={this.getValidationState(this.state.password.length)}>
+            <Col sm={12}>
+              <FormControl 
+                className ={showError('password') ? "error":""}
+                bsSize="small"
+                type="password"
+                placeholder="Password..."
+                value={this.state.password}
+                name = "password"
+                onChange={this.handleChange}
+                onSubmit={this.handleLoginSubmit}
+                onBlur={this.handleBlur('password')}
+              />
+            </Col>
+          </FormGroup>
+
+          <FormGroup>
+            <Col smOffset={3} sm={12}>
+                <ButtonToolbar>
+                    <Button type="submit" bsStyle="primary" bsSize="large" disabled={isDisabled} onClick={this.handleLoginSubmit}>Sign in</Button>
+                    <Button type="submit" bsSize="large" disabled={isDisabled} onClick={this.handleRegisterSubmit}>Register</Button>
+                </ButtonToolbar>
+            </Col>
+          </FormGroup>
+        </Form>;
       </div>
     );
   }

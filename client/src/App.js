@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Image, Button } from 'react-bootstrap';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import logo from './logo.svg';
 import boogie from './boogie.png';
@@ -24,12 +25,13 @@ class App extends Component {
   //TODO make the logos responsive
   render() {
     var component = <p>failed.</p>;
+    const centreStyled = { maxWidth: 400, margin: '0 auto 10px' };
     if (!this.state.isHost && !this.state.isGuest){
-      component = (
-        <div>
-        <h3>I am a...</h3>
-        <button name="isHost" onClick={this.handleSubmit}>Host</button>
-        <button name="isGuest" onClick={this.handleSubmit}>Guest</button>
+      component = (    
+        <div className="well" style={centreStyled}>
+            <h3>I am a...</h3>
+            <Button name="isHost" onClick={this.handleSubmit} bsStyle="primary" bsSize="large" block>Host</Button>
+            <Button name="isGuest" onClick={this.handleSubmit} bsSize="large" block>Guest</Button>
         </div>
       );
     }
