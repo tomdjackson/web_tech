@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import Login from './Login.js'
 
 class Host extends Component{
   constructor(){
     super();
     this.state = {
+      isLoggedIn: false,
       value: 0,
       code: '',
       newRoom: '',
@@ -15,7 +17,7 @@ class Host extends Component{
     this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
     this.handleDeleteChange = this.handleDeleteChange.bind(this);
     this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
-    this.getCode();
+    this.loginHandler = this.loginHandler.bind(this);
   }
 
   getCode(){
@@ -94,11 +96,18 @@ class Host extends Component{
 
   }
 
+  loginHandler(){
+    this.setState({isLoggedIn: true});
+    this.getCode();
+  }
+
+
   render(){
-    return (
-      <div className='Host'>
+    var component = this.state.isLoggedIn ? (
+      <div>
       <h3> Your unique party code is: </h3>
-      <h2> {this.state.code} </h2> <br/>
+      <h2> {this.state.code} </h2>
+      <br/>
       <form>
       <label>
       Create a Room: <br/>
@@ -134,6 +143,11 @@ class Host extends Component{
       <button onClick={this.handleDeleteSubmit}>Delete</button>
       </label>
       </form>
+      </div>
+    ) : (<Login loginHandler = {this.loginHandler}/>);
+    return (
+      <div className='Host'>
+        {component}
       </div>
       )
     }

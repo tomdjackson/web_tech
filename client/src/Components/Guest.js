@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Search from './Search.js';
-import Login from './Login.js';
+import JoinRoom from './JoinRoom.js';
 import Suggestion from './Suggestions.js';
 import SelectRoom from './SelectRoom.js';
 
@@ -110,7 +110,7 @@ class Guest extends Component{
         );
       }
     }
-    else component = (<Login loginHandler = {this.loginHandler}/>);
+    else component = (<JoinRoom loginHandler = {this.loginHandler}/>);
     return (
       <div className='Guest'>
         {component}

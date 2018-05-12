@@ -21,6 +21,7 @@ class App extends Component {
     this.setState({[e.target.name]: true});
   }
 
+  //TODO make the logos responsive
   render() {
     var component = <p>failed.</p>;
     if (!this.state.isHost && !this.state.isGuest){

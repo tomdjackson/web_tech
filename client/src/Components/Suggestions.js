@@ -12,7 +12,7 @@ class Suggestions extends Component{
     this.callDownvoteAPI = this.callDownvoteAPI.bind(this);
   }
 
-  handleUpvoteSubmit(value){
+  handleUpvoteSubmit(){
     this.callUpvoteAPI()
         .then(res=> {
           console.log(res.message);
@@ -45,7 +45,6 @@ class Suggestions extends Component{
     if (response.status !== 200) throw Error(body.message);
     return body;
   }
-
 
   render() {
     //TODO change button depending on its state

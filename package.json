@@ -7,9 +7,12 @@
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-force-ssl": "^0.3.2",
+    "express-session": "^1.15.6",
     "google-auth-library": "^1.4.0",
     "googleapis": "^29.0.0",
     "nodemon": "^1.17.3",

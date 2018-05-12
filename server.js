@@ -1,10 +1,13 @@
 const express = require('express');
-const bodyParser = require('body-parser')
 const sqlite3 = require('sqlite3').verbose();
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const randomstring = require('randomstring');
 const fs = require('fs');
 const forceSSL = require('express-force-ssl');
 const https = require('https');
+const bcrypt = require('bcrypt');
 
 var privateKey = fs.readFileSync('sslcrt/private.key');
 var cetificate = fs.readFileSync('sslcrt/primary.crt');
@@ -12,6 +15,8 @@ var credentials = {key: privateKey, cert: cetificate};
 
 const app = express();
 const port = process.env.PORT || 5000;
+app.use(cookieParser());
+app.use(session({secret:"Secret"}));
 app.use(bodyParser.json());
 app.use(forceSSL);
 var httpsServer = https.createServer(credentials, app).listen(port, () => console.log(`Listening on port ${port}`));
@@ -21,7 +26,10 @@ let db = new sqlite3.Database('data/db.db', (err) => {
   console.log("Connected to the SQlite database.");
 });
 
-db.run("CREATE TABLE IF NOT EXISTS parties (key TEXT, user TEXT)", (err) => {
+db.run("CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT)", (err) => {
+  if(err) return console.error(err.message);
+})
+db.run("CREATE TABLE IF NOT EXISTS parties (key TEXT, user TEXT, username TEXT, FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
   if(err) return console.error(err.message);
 });
 db.run("CREATE TABLE IF NOT EXISTS playlists (key TEXT, party_id TEXT, FOREIGN KEY (party_id) REFERENCES party(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
@@ -31,14 +39,25 @@ db.run("CREATE TABLE IF NOT EXISTS songs (key TEXT, title TEXT, link TEXT, thumb
   if(err) return console.error(err.message);
 });
 
+app.get('/', function(req, res){
+  res.cookie('name', 'express').send('cookie set');
+});
+
+app.post('/api/register', (req, res) => {
+  //TODO check if username is taken
+  db.run("INSERT INTO users VALUES(?,?)", [req.body.user, req.body.name], (err) =>{
+    if(err) return console.error(err.message);
+  });
+});
+
 app.get('/api/createparty', (req, res) => {
   var string = randomstring.generate({
     length: 5,
     charset: 'alphabetic'
   }).toUpperCase();
-  //TODO  check if the string already is a party
-  //TODO  add username
-  db.run("INSERT INTO parties VALUES(?,?)", [string, 'me'], (err) => {
+  //TODO check if the string already is a party
+  //TODO add username
+  db.run("INSERT INTO parties VALUES(?,?)", [string, req.body.user], (err) => {
     if(err) return console.error(err.message);
   });
   console.log("Party Created. Code: " + string);
@@ -47,7 +66,7 @@ app.get('/api/createparty', (req, res) => {
 
 app.post('/api/createplaylist', (req, res) => {
   //TODO needs a unique id not just a room name
-  db.run("INSERT INTO playlists VALUES(?,?)", [req.body.name, req.body.code], (err) => {
+  db.run("INSERT INTO playlists VALUES(?,?,?)", [req.body.name, req.body.code], (err) => {
     if(err) return console.error(err.message);
   });
   console.log("Room " + req.body.name + " Created in Party " + req.body.code);
@@ -86,7 +105,6 @@ app.post('/api/getplaylists', (req, res)=>{
 });
 
 app.post('/api/getsongs', (req, res) =>{
-  console.log("here");
   db.all("SELECT * FROM songs WHERE playlist_id=?", req.body.playlist, (err, rows)=>{
     if(err) return console.error(err.message);
     res.send({songs: rows});
@@ -119,8 +137,16 @@ app.post('/api/downvote', (req, res) => {
     votes = v;
   });
   votes--;
-  db.run("UPDATE songs SET votes=? WHERE key=?", [votes, req.body.key], (err)=>{
-    if(err) return console.error(err.message);
-  });
-  res.send({message: req.body.key + " downvoted. Votes = "+votes});
+  if(votes <= -3){
+    db.run("DELETE FROM songs WHERE key=?", req.body.key, (err) =>{
+      if(err) return console.error(err.message);
+    });
+    res.send({message: req.body.key + " deleted from playlist"});
+  }
+  else{
+    db.run("UPDATE songs SET votes=? WHERE key=?", [votes, req.body.key], (err)=>{
+      if(err) return console.error(err.message);
+    });
+    res.send({message: req.body.key + " downvoted. Votes = "+votes});
+  }
 });
