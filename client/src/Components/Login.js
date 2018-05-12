@@ -12,8 +12,10 @@ class Login extends Component {
       }
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.callAPI = this.callAPI.bind(this);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this);
+    this.callLoginApi = this.callLoginApi.bind(this);
+    this.callRegisterApi = this.callRegisterApi.bind(this);
   }
 
   //TODO Form validation
@@ -21,14 +23,50 @@ class Login extends Component {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  callAPI = async () => {
-
+  handleLoginSubmit(e){
+    e.preventDefault();
+    this.callLoginApi()
+        .then(res=>{
+          console.log(res.success);
+          if(res.success) this.props.loginHandler(this.state.username);
+          else {
+            console.log("incorrect username or password");
+            this.setState(({password: ''}));
+          }
+        })
+        .catch(err => console.log(err));
   }
 
-  handleSubmit(e){
+  callLoginApi = async () => {
+    const response = await fetch('/api/login', {
+      method:"POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({username: this.state.username, password: this.state.password})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
+
+  handleRegisterSubmit(e){
     e.preventDefault();
-    //TODO handle Auth
-    this.props.loginHandler();
+    this.callRegisterApi()
+        .then(res=>{
+          if(res.success) this.props.loginHandler(this.state.username);
+          else console.log("Username is taken");
+        })
+        .catch(err => console.log(err));
+  }
+
+  callRegisterApi = async () => {
+    const response = await fetch('/api/register', {
+      method:"POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({username: this.state.username, password: this.state.password})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
   }
 
   handleBlur = (field) => (evt) => {
@@ -64,7 +102,7 @@ class Login extends Component {
             value={this.state.username}
             name = "username"
             onChange={this.handleChange}
-            onSubmit={this.handleSubmit}
+            onSubmit={this.handleLoginSubmit}
             onBlur={this.handleBlur('username')}
             />
           <br/>
@@ -75,12 +113,12 @@ class Login extends Component {
             value={this.state.password}
             name = "password"
             onChange={this.handleChange}
-            onSubmit={this.handleSubmit}
+            onSubmit={this.handleLoginSubmit}
             onBlur={this.handleBlur('password')}
             />
           <br/>
-          <button disabled={isDisabled} onClick={this.handleSubmit}> Login </button>
-          <button disabled={isDisabled} onClick={this.handleSubmit}> Register </button>
+          <button disabled={isDisabled} onClick={this.handleLoginSubmit}> Login </button>
+          <button disabled={isDisabled} onClick={this.handleRegisterSubmit}> Register </button>
         </form>
       </div>
     );

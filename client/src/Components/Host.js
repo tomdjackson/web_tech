@@ -8,6 +8,7 @@ class Host extends Component{
     super();
     this.state = {
       isLoggedIn: false,
+      username: '',
       value: 0,
       code: '',
       newRoom: '',
@@ -18,6 +19,7 @@ class Host extends Component{
     this.handleDeleteChange = this.handleDeleteChange.bind(this);
     this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
     this.loginHandler = this.loginHandler.bind(this);
+    this.callPartyApi = this.callPartyApi.bind(this);
   }
 
   getCode(){
@@ -27,7 +29,11 @@ class Host extends Component{
   }
 
   callPartyApi = async () => {
-    const response = await fetch('/api/createparty');
+    const response = await fetch('/api/createparty', {
+      method:"POST",
+      headers: {"Content-Type": "application/json"},
+      body: ({username: this.state.username})
+    });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
@@ -37,7 +43,7 @@ class Host extends Component{
     const response = await fetch('/api/createplaylist', {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({name: this.state.newRoom, code: this.state.code})
+      body: JSON.stringify({name: this.state.newRoom, code: this.state.code, username: this.state.username})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -96,8 +102,8 @@ class Host extends Component{
 
   }
 
-  loginHandler(){
-    this.setState({isLoggedIn: true});
+  loginHandler(username){
+    this.setState({isLoggedIn: true, username: username});
     this.getCode();
   }
 
