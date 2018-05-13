@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import Login from './Login.js'
+import Login from './Login.js';
+import Player from './Player.js';
+import Suggestion from './Suggestions.js';
+import Search from './Search.js';
 
 class Host extends Component{
   constructor(){
@@ -12,6 +15,9 @@ class Host extends Component{
       value: 0,
       code: '',
       newRoom: '',
+      room: '',
+      song: '',
+      songs: [],
       rooms: []
     }
     this.handleCreateChange = this.handleCreateChange.bind(this);
@@ -19,7 +25,45 @@ class Host extends Component{
     this.handleDeleteChange = this.handleDeleteChange.bind(this);
     this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
     this.loginHandler = this.loginHandler.bind(this);
+    this.getCode = this.getCode.bind(this);
     this.callPartyApi = this.callPartyApi.bind(this);
+    this.getSongs = this.getSongs.bind(this);
+    this.callSongsApi = this.callSongsApi.bind(this);
+    this.getRooms = this.getRooms.bind(this);
+    this.componentWillUnmount = this.componentWillUnmount.bind(this)
+    this.handleNext = this.handleNext.bind(this);
+    this.displaySongs = this.displaySongs.bind(this);
+  }
+
+  componentWillUnmount(){
+    if(this.timeout) clearTimeout(this.timeout)
+  }
+
+  getRooms(){
+    if(this.state.code === ''){
+      setTimeout(this.getRooms, 50);
+      return;
+    }
+    this.callRoomsApi()
+        .then(res=>{
+          var roomArray = [];
+          res.rooms.forEach((room) =>{
+            roomArray.push(room.key);
+          });
+          this.setState({rooms: roomArray});
+        })
+        .catch(err => console.log(err));
+  }
+
+  callRoomsApi = async () => {
+    const response = await fetch('/api/getplaylists', {
+      method: 'POST',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({code: this.state.code})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
   }
 
   getCode(){
@@ -32,7 +76,40 @@ class Host extends Component{
     const response = await fetch('/api/createparty', {
       method:"POST",
       headers: {"Content-Type": "application/json"},
-      body: ({username: this.state.username})
+      body: JSON.stringify({username: this.state.username})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
+
+  getSongs(){
+    if(this.state.room === ''){
+      setTimeout(this.getSongs, 50);
+      return;
+    }
+    this.callSongsApi()
+        .then(res=>{
+          this.setState({songs:res.songs})
+          var index = 0;
+          var empty = false;
+          while(res.songs[index].played === 1 && !empty){
+            index++;
+            if(index>res.songs.length){
+              empty = true;
+              index = 0;
+            }
+          }
+          this.setState({song: this.state.songs[index]});
+        })
+        .catch(err => console.log(err));
+  }
+
+  callSongsApi = async () =>{
+    const response = await fetch('/api/getsongs', {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({playlist: this.state.room})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -55,7 +132,11 @@ class Host extends Component{
   }
 
   handleDeleteChange(e, i, v){
-    this.setState({value: v});
+    this.setState({value: v, room: ''});
+    if(v>0){
+      this.setState({room: this.state.rooms[v-1]});
+      this.getSongs();
+    }
   }
 
   handleCreateSubmit(e){
@@ -99,16 +180,52 @@ class Host extends Component{
       newRoomArray.splice(i, 1);
       this.setState({value: 0, rooms: newRoomArray});
     }
-
   }
 
   loginHandler(username){
     this.setState({isLoggedIn: true, username: username});
     this.getCode();
+    this.getRooms();
   }
 
+  callPlayedSong = async () => {
+    const response = await fetch('/api/played', {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({key: this.state.song.key})
+    });
+    const body = await response.json();
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
+
+  handleNext(){
+    this.callPlayedSong()
+        .then(res=> console.log("next song"))
+        .catch(err=>console.log(err));
+    this.getSongs();
+  }
+
+  displaySongs(){
+  const options = this.state.songs.map(r => (
+    <li key={r.id}>
+      <Suggestion song={r}/>
+    </li>
+  ));
+  return <ul>{options}</ul>;
+  }
 
   render(){
+    var songs = '';
+    var player = '';
+    var search = '';
+    if(this.state.room!==''){
+      if(this.state.songs.length > 0){
+        songs = this.displaySongs();
+        player = <Player song={this.state.song} handleNext={this.handleNext}/>
+      }
+      search = <Search room={this.state.room}/>
+    }
     var component = this.state.isLoggedIn ? (
       <div>
       <h3> Your unique party code is: </h3>
@@ -136,7 +253,7 @@ class Host extends Component{
       </form>
       <form>
       <label>
-      Delete a Room: <br/>
+      Select a Room: <br/>
       <DropDownMenu
         value={this.state.value}
         onChange={this.handleDeleteChange}
@@ -149,8 +266,11 @@ class Host extends Component{
       <button onClick={this.handleDeleteSubmit}>Delete</button>
       </label>
       </form>
+      {search}
+      {songs}
+      {player}
       </div>
-    ) : (<Login loginHandler = {this.loginHandler}/>);
+    ) : (<Login loginHandler = {this.loginHandler}/>)
     return (
       <div className='Host'>
         {component}

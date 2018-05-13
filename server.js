@@ -35,7 +35,7 @@ db.run("CREATE TABLE IF NOT EXISTS parties (key TEXT, username TEXT, FOREIGN KEY
 db.run("CREATE TABLE IF NOT EXISTS playlists (key TEXT, party_id TEXT, FOREIGN KEY (party_id) REFERENCES party(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
   if(err) return console.error(err.message);
 });
-db.run("CREATE TABLE IF NOT EXISTS songs (key TEXT, title TEXT, link TEXT, thumbnail TEXT, votes INT, playlist_id TEXT, FOREIGN KEY (playlist_id) REFERENCES playlist(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
+db.run("CREATE TABLE IF NOT EXISTS songs (key TEXT, title TEXT, played int, thumbnail TEXT, votes INT, playlist_id TEXT, FOREIGN KEY (playlist_id) REFERENCES playlist(key) ON DELETE CASCADE ON UPDATE CASCADE)", (err) => {
   if(err) return console.error(err.message);
 });
 
@@ -66,16 +66,22 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/createparty', (req, res) => {
-  var string = randomstring.generate({
-    length: 5,
-    charset: 'alphabetic'
-  }).toUpperCase();
-  //TODO check if the string already is a party
-  //TODO add username
-  db.run("INSERT INTO parties VALUES(?,?)", [string, req.body.username], (err) => {
+  db.get("SELECT key FROM parties WHERE username=?", [req.body.username], (err, party) =>{
     if(err) return console.error(err.message);
+    if(party) res.send({code: party.key});
+    else{
+      var string = randomstring.generate({
+        length: 5,
+        charset: 'alphabetic'
+      }).toUpperCase();
+      //TODO check if the string already is a party
+      //TODO add username
+      db.run("INSERT INTO parties VALUES(?,?)", [string, req.body.username], (err) => {
+        if(err) return console.error(err.message);
+        res.send({code: string});
+      });
+    }
   });
-  res.send({code: string});
 });
 
 app.post('/api/createplaylist', (req, res) => {
@@ -104,7 +110,7 @@ app.post('/api/deleteplaylist', (req, res) =>{
 app.post('/api/addsong', (req, res) =>{
   //TODO check if song already exists in the playlist
   //TODO Should the ID be the song id + the playlist id to make it unique?
-  db.run("INSERT INTO songs (key, title, link, thumbnail, votes, playlist_id) VALUES(?,?,?,?,?,?)", [req.body.id, req.body.title, req.body.link, req.body.thumbnail, 0, req.body.playlist], (err)=>{
+  db.run("INSERT INTO songs (key, title, played, thumbnail, votes, playlist_id) VALUES(?,?,?,?,?,?)", [req.body.id, req.body.title, 0, req.body.thumbnail, 0, req.body.playlist], (err)=>{
     if(err) return console.error(err.message);
   });
   res.send({message: "added " + req.body.id});
@@ -123,6 +129,12 @@ app.post('/api/getsongs', (req, res) =>{
     res.send({songs: rows});
   });
 });
+
+app.post('/api/played', (req, res) =>{
+  db.run("UPDATE songs SET played=1 where key=?", [req.body.key], (err, value)=>{
+    if(err) return console.error(err.message);
+  })
+})
 
 app.post('/api/upvote', (req, res) => {
   //TODO increment/decrement votes
