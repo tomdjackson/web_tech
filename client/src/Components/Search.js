@@ -89,7 +89,7 @@ class Search extends Component {
                   onKeyPress={e => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
-                      this.handleCreateSubmit(e);
+                      this.handleSubmit(e);
                     }}}
                   hintText="Make a Suggestion"
                   floatingLabelText="Make a Suggestion"

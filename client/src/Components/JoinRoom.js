@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { RaisedButton } from 'material-ui';
+import { RaisedButton, TextField} from 'material-ui';
 import ActionHome from 'material-ui/svg-icons/action/home';
 
 class JoinRoom extends Component {
@@ -47,32 +47,35 @@ class JoinRoom extends Component {
   }
 
   render() {
+    const style = {margin: 12};
     return (
-      <div className="login">
+      <div className="joinRoom">
         <h2> Join a Party </h2>
         <form>
-          <input
+          <TextField
             type="text"
-            placeholder="Unique Party Code..."
-            value={this.state.code}
-            maxLength="5"
-            name = "code"
+            hintText="Unique Party Code"
+            floatingLabelText="Enter a Code"
+            name="code"
+            maxLength = "5"
+            value ={this.state.code}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}
-            />
+          />
           <br/>
-          <input
+          <TextField
             type="text"
-            placeholder="Name..."
-            value={this.state.name}
+            hintText="Name"
+            floatingLabelText="Enter Your Name"
             maxLength = "10"
-            name = "name"
+            name="name"
+            value ={this.state.name}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}
-            />
+          />
           <br/>
-          <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
-          <button onClick={this.handleSubmit}> Join </button>
+          <RaisedButton icon={< ActionHome/>} style={style} onClick={this.props.handler} />
+          <RaisedButton label="Join" style={style} onClick={this.handleSubmit}/> 
         </form>
       </div>
     );
