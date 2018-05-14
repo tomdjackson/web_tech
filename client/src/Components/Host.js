@@ -5,8 +5,10 @@ import Login from './Login.js';
 import Player from './Player.js';
 import Suggestion from './Suggestions.js';
 import Search from './Search.js';
+import './../App.css';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import SelectRoom from './SelectRoom.js';
 
 class Host extends Component{
   constructor(){
@@ -134,7 +136,7 @@ class Host extends Component{
     this.setState({newRoom: e.target.value.toLowerCase()});
   }
 
-  handleDeleteChange(e, i, v){
+  handleDeleteChange(v){
     this.setState({value: v, room: ''});
     if(v>0){
       this.setState({room: this.state.rooms[v-1]});
@@ -232,7 +234,7 @@ class Host extends Component{
   displaySongs(){
   const options = this.state.songs.map(r => (
     <li key={r.id}>
-      <Suggestion song={r}/>
+      <Suggestion song={r} room={this.state.room}/>
     </li>
   ));
   return <ul>{options}</ul>;
@@ -269,26 +271,11 @@ class Host extends Component{
         onChange={this.handleCreateChange}
         onSubmit={this.handleCreateSubmit}
       />
-      <button onClick={this.handleCreateSubmit}>Create</button>
-
+    <button onClick={this.handleCreateSubmit}>Create</button>
       <br/>
       </label>
       </form>
-      <form>
-      <label>
-      Select a Room: <br/>
-      <DropDownMenu
-        value={this.state.value}
-        onChange={this.handleDeleteChange}
-      >
-        <MenuItem value={0} primaryText ="Select"/>
-        {this.state.rooms.map((room, index) =>
-          <MenuItem key={index+1} value={index+1} primaryText={room}/>
-        )}
-      </DropDownMenu>
-      <button onClick={this.handleDeleteSubmit}>Delete</button>
-      </label>
-      </form>
+      <SelectRoom rooms={this.state.rooms} handler = {this.handleDeleteChange}/>
       {search}
       {songs}
       {player}

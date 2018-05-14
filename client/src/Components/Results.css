@@ -3,3 +3,12 @@ ul{
   padding: 0;
   margin: 0;
 }
+
+.Result{
+  border:1px solid grey;
+}
+
+.Thumb{
+  height:40px;
+  width:60px;
+}

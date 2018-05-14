@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import "./Results.css"
 
 class Result extends Component{
   constructor(props){
@@ -32,7 +33,7 @@ class Result extends Component{
       <div className="Result" key={this.props.result.id}>
         <img src={this.props.result.thumbnails.default.url} alt={this.props.result.id} className="thumb" height="40" width="40"/>
         <h4>{this.props.result.title}</h4>
-        <p1>{this.props.result.description}</p1>
+        <p>{this.props.result.description}</p>
         <br/>
         <button onClick={this.handleSubmit}>Suggest</button>
       </div>

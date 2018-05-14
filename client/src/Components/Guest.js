@@ -79,7 +79,7 @@ class Guest extends Component{
     this.getSongs();
     const options = this.state.songs.map(r => (
       <li key={r.id}>
-        <Suggestion song={r}/>
+        <Suggestion song={r} room={this.state.room}/>
       </li>
     ));
     return <ul>{options}</ul>;

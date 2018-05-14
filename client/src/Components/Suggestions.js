@@ -3,6 +3,8 @@ import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import downvote from './../svg/arrow_downward.svg';
 import upvote from './../svg/arrow_upward.svg';
+import './../App.css'
+import './Results.css'
 
 class Suggestions extends Component{
   constructor(props){
@@ -33,7 +35,7 @@ class Suggestions extends Component{
     const response = await fetch('/api/upvote', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({key: this.state.id})
+      body: JSON.stringify({key: this.state.id, playlist: this.props.room})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -43,7 +45,7 @@ class Suggestions extends Component{
     const response = await fetch('/api/downvote', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({key: this.state.id})
+      body: JSON.stringify({key: this.state.id, playlist: this.props.room})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -63,6 +65,8 @@ class Suggestions extends Component{
           <img src={downvote} className="downvote"/>
         </IconButton>
         </div>
+        <img src={this.props.song.thumbnail} alt={this.props.song.id} className="thumb"/>
+        <br/>
         {this.props.song.title}
       </div>
     );

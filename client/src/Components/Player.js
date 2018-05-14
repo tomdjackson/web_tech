@@ -14,14 +14,14 @@ class Player extends Component{
 
   render(){
     var playerOpts = {
-      height: '390',
+      height:'360',
       width: '640',
       playerVars:{
         autoplay:1
       }
     }
     return (
-      <div className="Player" >
+      <div>
         <Youtube
           videoId={this.props.song.key}
           opts={playerOpts}
