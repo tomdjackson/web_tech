@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import {List, ListItem} from 'material-ui/List';
+import Paper from 'material-ui/Paper';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import Login from './Login.js';
 import Player from './Player.js';
 import Suggestion from './Suggestions.js';
 import Search from './Search.js';
-import './../App.css';
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
 import SelectRoom from './SelectRoom.js';
+import './../App.css';
 
 class Host extends Component{
   constructor(){
@@ -232,12 +234,27 @@ class Host extends Component{
   }
 
   displaySongs(){
+    const style = {
+      height: 200,
+      width: '80%',
+      overflow: 'auto',
+      margin: 20,
+      textAlign: 'center',
+      display: 'inline-block',
+    };
   const options = this.state.songs.map(r => (
-    <li key={r.id}>
-      <Suggestion song={r} room={this.state.room}/>
-    </li>
+      <ListItem key={r.id}>
+        <Suggestion song={r} room={this.state.room}/>
+      </ListItem>
   ));
-  return <ul>{options}</ul>;
+  return (
+    <Paper style={style} zDepth={1}>
+      Suggestions
+      <List style={{maxHeight: '100%', overflow: 'auto'}}>
+        {options}
+      </List>
+    </Paper>
+  );
   }
 
   render(){

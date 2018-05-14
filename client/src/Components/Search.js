@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Result from './Result.js';
 import './Results.css'
+import {List, ListItem} from 'material-ui/List';
+import Paper from 'material-ui/Paper';
 const youtubeSearch = require('youtube-search');
 
 const opts = {
@@ -49,41 +51,56 @@ class Search extends Component {
   }
 
   getResults(){
+    const style = {
+      maxHeight: 200,
+      width: '80%',
+      overflow: 'auto',
+      margin: 20,
+      textAlign: 'center',
+      display: 'inline-block'
+    };
     const options = this.state.results.map(r => (
-      <li>
+      <ListItem key={r.id}>
         <Result key={r.id} handler={this.handler} result={r} room={this.props.room}/>
-      </li>
+      </ListItem>
     ));
-    return <ul>{options}</ul>;
+    return (
+      <Paper style={style} zDepth={1}>
+        Search Results
+        <List style={{maxHeight: '100%', overflow: 'auto'}}>
+          {options}
+        </List>
+      </Paper>
+    );
   }
 
-    render() {
-      var element = <p>No songs found.</p>;
-        if(this.state.results.length>0) element = this.getResults();
-        else if(!this.state.hasSearch) element = null;
-          return (
-            <div className="Search">
-              <form>
-                <input
-                  type="text"
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      this.handleSubmit(e);
-                    }}}
-                    placeholder="Make a Suggestion...."
-                    value ={this.state.search}
-                    onChange={this.handleChange}
-                    onSubmit={this.handleSubmit}
-                    />
-                  <button onClick={this.handleSubmit}> Search </button>
-                </form>
-                <div className="search-results">
-                  {element}
-                </div>
-              </div>
-            );
-          }
-        }
+  render() {
+    var element = <p>No songs found.</p>;
+      if(this.state.results.length>0) element = this.getResults();
+      else if(!this.state.hasSearch) element = null;
+      return (
+        <div className="Search">
+          <form>
+            <input
+              type="text"
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  this.handleSubmit(e);
+                }}}
+                placeholder="Make a Suggestion...."
+                value ={this.state.search}
+                onChange={this.handleChange}
+                onSubmit={this.handleSubmit}
+                />
+              <button onClick={this.handleSubmit}> Search </button>
+            </form>
+            <div className="search-results">
+              {element}
+            </div>
+          </div>
+        );
+      }
+    }
 
-        export default Search;
+    export default Search;
