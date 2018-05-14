@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Result from './Result.js';
 import './Results.css'
 import {List, ListItem} from 'material-ui/List';
+import {TextField, RaisedButton} from 'material-ui';
 import Paper from 'material-ui/Paper';
 const youtubeSearch = require('youtube-search');
 
@@ -75,32 +76,38 @@ class Search extends Component {
   }
 
   render() {
+    const style = {margin: 12};
     var element = <p>No songs found.</p>;
       if(this.state.results.length>0) element = this.getResults();
       else if(!this.state.hasSearch) element = null;
       return (
         <div className="Search">
           <form>
-            <input
-              type="text"
-              onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  this.handleSubmit(e);
-                }}}
-                placeholder="Make a Suggestion...."
-                value ={this.state.search}
-                onChange={this.handleChange}
-                onSubmit={this.handleSubmit}
+            <label>
+                <TextField
+                  type="text"
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      this.handleCreateSubmit(e);
+                    }}}
+                  hintText="Make a Suggestion"
+                  floatingLabelText="Make a Suggestion"
+                  value ={this.state.search}
+                  onChange={this.handleChange}
+                  onSubmit={this.handleSubmit}
                 />
-              <button onClick={this.handleSubmit}> Search </button>
-            </form>
-            <div className="search-results">
-              {element}
-            </div>
-          </div>
-        );
-      }
-    }
 
-    export default Search;
+                <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSubmit}/>
+            </label>
+          </form>
+          <div className="search-results">
+            {element}
+          </div>
+        </div>
+      );
+  }
+      
+}
+
+export default Search;

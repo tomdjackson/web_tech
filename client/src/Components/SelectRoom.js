@@ -19,11 +19,11 @@ class SelectRoom extends Component{
 
   render(){
     const deleteStyle = {margin: 12, marginLeft: -20, height: 24, width: 24, padding: 20}
-    const fixx = {marginTop: 10, marginLeft: -10, position: "fixed"}
+    const buttonStyle = {marginTop: 10, marginLeft: -7, position: "fixed"}
     return(
       <div>
       <form>
-        <label style={{marginLeft: -135,}}>
+        <label style={{marginLeft: -140,}}>
           Select a Room: <br/>
           <DropDownMenu 
             value={this.state.value}
@@ -36,7 +36,7 @@ class SelectRoom extends Component{
             )}
           </DropDownMenu>
           
-          <RaisedButton label="Delete" style={deleteStyle, fixx} onClick={this.props.deleteRoomsHandler}/>
+          <RaisedButton label="Delete" style={deleteStyle, buttonStyle} onClick={this.props.deleteRoomsHandler}/>
         
         </label>
       </form>

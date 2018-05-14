@@ -151,7 +151,7 @@ class Host extends Component{
   handleCreateSubmit(e){
     e.preventDefault();
     console.log(e.target);
-    this.setState({newRoom: e.target.value.toLowerCase()});
+    this.setState({newRoom: this.state.newRoom.toLowerCase()});
     if(this.state.newRoom.length > 0){
       if(!this.state.rooms.includes(this.state.newRoom)){
         var newRoomArray = this.state.rooms;
