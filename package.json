@@ -15,6 +15,7 @@
     "express-session": "^1.15.6",
     "google-auth-library": "^1.4.0",
     "googleapis": "^29.0.0",
+    "material-ui": "^0.20.1",
     "nodemon": "^1.17.3",
     "npm": "^6.0.1",
     "package.json": "^2.0.1",

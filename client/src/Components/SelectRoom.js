@@ -28,7 +28,7 @@ class SelectRoom extends Component{
           <DropDownMenu 
             value={this.state.value}
             onChange={this.handleChange}
-            style = {{width: 303, marginLeft: 22}}
+            style = {{width: 303, marginLeft: -122}}
           >
             <MenuItem value={0} primaryText ="Select"/>
             {this.props.rooms.map((room, index) =>
