@@ -154,22 +154,21 @@ app.post('/api/upvote', (req, res) => {
 app.post('/api/downvote', (req, res) => {
   //TODO increment/decrement votes
   //TODO if <= -5 remove suggestion
-  var votes=0;
   db.get("SELECT votes FROM songs WHERE key=?", [req.body.key], (err, value)=>{
     if(err) return console.error(err.message);
-    votes = v.votes;
+    var votes = value.votes-1;
+    if(votes <= -3){
+      db.run("DELETE FROM songs WHERE key=?", [req.body.key], (err) =>{
+        if(err) return console.error(err.message);
+      });
+      res.send({message: req.body.key + " deleted from playlist"});
+    }
+    else{
+      db.run("UPDATE songs SET votes=? WHERE key=?", [votes, req.body.key], (err)=>{
+        if(err) return console.error(err.message);
+      });
+      res.send({message: req.body.key + " downvoted. Votes = "+votes});
+    }
   });
-  votes--;
-  if(votes <= -3){
-    db.run("DELETE FROM songs WHERE key=?", [req.body.key], (err) =>{
-      if(err) return console.error(err.message);
-    });
-    res.send({message: req.body.key + " deleted from playlist"});
-  }
-  else{
-    db.run("UPDATE songs SET votes=? WHERE key=?", [votes, req.body.key], (err)=>{
-      if(err) return console.error(err.message);
-    });
-    res.send({message: req.body.key + " downvoted. Votes = "+votes});
-  }
+
 });

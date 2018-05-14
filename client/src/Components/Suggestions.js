@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
+import downvote from './../svg/arrow_downward.svg';
+import upvote from './../svg/arrow_upward.svg';
 
 class Suggestions extends Component{
   constructor(props){
@@ -50,10 +54,16 @@ class Suggestions extends Component{
     //TODO change button depending on its state
     return(
       <div className="Suggestion" key={this.props.song.key}>
+        <div className="Voting">
+        <IconButton tooltip="Font Icon" onClick={this.handleUpvoteSubmit}>
+          <img src={upvote} className="upvote"/>
+        </IconButton>
         {this.props.song.votes}
+        <IconButton tooltip="Font Icon" onClick={this.handleDownvoteSubmit}>
+          <img src={downvote} className="downvote"/>
+        </IconButton>
+        </div>
         {this.props.song.title}
-        <button onClick={this.handleUpvoteSubmit}>Upvote</button>
-        <button onClick={this.handleDownvoteSubmit}>Downvote</button>
       </div>
     );
   }

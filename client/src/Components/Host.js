@@ -5,6 +5,8 @@ import Login from './Login.js';
 import Player from './Player.js';
 import Suggestion from './Suggestions.js';
 import Search from './Search.js';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 class Host extends Component{
   constructor(){
@@ -33,6 +35,7 @@ class Host extends Component{
     this.componentWillUnmount = this.componentWillUnmount.bind(this)
     this.handleNext = this.handleNext.bind(this);
     this.displaySongs = this.displaySongs.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   componentWillUnmount(){
@@ -141,6 +144,7 @@ class Host extends Component{
 
   handleCreateSubmit(e){
     e.preventDefault();
+    console.log(e.target);
     this.setState({newRoom: e.target.value.toLowerCase()});
     if(this.state.newRoom.length > 0){
       if(!this.state.rooms.includes(this.state.newRoom)){
@@ -171,6 +175,25 @@ class Host extends Component{
 
   handleDeleteSubmit(e){
     e.preventDefault();
+    var confirm = false;
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure you want to delete ' + this.state.room + '?',
+      buttons:[
+        {
+          label: 'Delete',
+          onClick: () => this.delete()
+        },
+        {
+          label: 'Cancel',
+          onClick: () => alert("Cancel")
+        }
+      ]
+    })
+
+  }
+
+  delete(){
     var newRoomArray = this.state.rooms;
     if(this.state.value>0){
       this.deletePlaylistApi()
@@ -178,7 +201,7 @@ class Host extends Component{
           .catch(err=>console.log(err));
       var i = this.state.value - 1;
       newRoomArray.splice(i, 1);
-      this.setState({value: 0, rooms: newRoomArray});
+      this.setState({value: 0, rooms: newRoomArray, room: ''});
     }
   }
 

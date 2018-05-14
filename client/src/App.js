@@ -27,7 +27,7 @@ class App extends Component {
     var component = <p>failed.</p>;
     const centreStyled = { maxWidth: 400, margin: '0 auto 10px' };
     if (!this.state.isHost && !this.state.isGuest){
-      component = (    
+      component = (
         <div className="well" style={centreStyled}>
             <h3>I am a...</h3>
             <Button name="isHost" onClick={this.handleSubmit} bsStyle="primary" bsSize="large" block>Host</Button>
@@ -41,9 +41,9 @@ class App extends Component {
       <MuiThemeProvider>
       <div className="App">
       <header className="App-header">
-      <img src={boogie} className="App-logo-boogie" alt="boogie" />
+      <img src={boogie} className="App-logo-balls" alt="boogie" />
       <img src={logo} className="App-logo" alt="logo" />
-      <img src={ballot} className="App-logo-ballot" alt="ballot" />
+      <img src={ballot} className="App-logo-balls" alt="ballot" />
       </header>
       {component}
       </div>
