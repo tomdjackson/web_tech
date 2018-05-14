@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import {RaisedButton, IconButton, TextField} from 'material-ui';
 import { Form, ButtonToolbar, Col, ControlLabel, Checkbox, FormGroup, FormControl, Button } from 'react-bootstrap';
+import ActionHome from 'material-ui/svg-icons/action/home';
 
 class Login extends Component {
   constructor(props){
@@ -91,6 +93,7 @@ class Login extends Component {
 
   render() {
     const errors = this.validate(this.state.username, this.state.password);
+    const style = { margin: 12};
     const centreStyled = { maxWidth: 400, margin: '0 auto 10px' }
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     const showError = (field) =>{
@@ -101,48 +104,37 @@ class Login extends Component {
     return (
       <div className="login" style={centreStyled}>
         <h2> Login as a Host </h2>
-        <Form horizontal>
-          <FormGroup controlId="formHorizontalUsername" >
-            <Col sm={12}>
-              <FormControl
+        <TextField 
                 className ={showError('username') ? "error":""}
-                bsSize="small"
                 type="text"
-                placeholder="Username..."
+                hintText="Username"
+                floatingLabelText="Username"
                 value={this.state.username}
                 name = "username"
                 onChange={this.handleChange}
                 onSubmit={this.handleLoginSubmit}
                 onBlur={this.handleBlur('username')} 
-              />
-            </Col>
-          </FormGroup>
-
-          <FormGroup controlId="formHorizontalPassword" validationState={this.getValidationState(this.state.password.length)}>
-            <Col sm={12}>
-              <FormControl 
+        /><br />
+        <TextField 
                 className ={showError('password') ? "error":""}
-                bsSize="small"
+                type="text"
+                hintText="Password"
+                floatingLabelText="Password"
                 type="password"
-                placeholder="Password..."
+                onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      this.handleLoginSubmit(e);
+                    }}}
                 value={this.state.password}
                 name = "password"
                 onChange={this.handleChange}
                 onSubmit={this.handleLoginSubmit}
-                onBlur={this.handleBlur('password')}
-              />
-            </Col>
-          </FormGroup>
-
-          <FormGroup>
-            <Col smOffset={3} sm={12}>
-                <ButtonToolbar>
-                    <Button type="submit" bsStyle="primary" bsSize="large" disabled={isDisabled} onClick={this.handleLoginSubmit}>Sign in</Button>
-                    <Button type="submit" bsSize="large" disabled={isDisabled} onClick={this.handleRegisterSubmit}>Register</Button>
-                </ButtonToolbar>
-            </Col>
-          </FormGroup>
-        </Form>;
+                onBlur={this.handleBlur('password')} 
+        /><br />
+        <RaisedButton style={style} icon={< ActionHome/>} onClick={this.props.handler} />
+        <RaisedButton label="Sign In" secondary={true} disabled={isDisabled} style={style} onClick={this.handleLoginSubmit}/>
+        <RaisedButton label="Register" disabled={isDisabled} style={style} onClick={this.handleRegisterSubmit}/>
       </div>
     );
   }

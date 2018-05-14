@@ -3,6 +3,8 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
+import {TextField, RaisedButton} from 'material-ui';
+import ActionHome from 'material-ui/svg-icons/action/home';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Login from './Login.js';
@@ -261,6 +263,7 @@ class Host extends Component{
     var songs = '';
     var player = '';
     var search = '';
+    const style = {margin: 12};
     if(this.state.room!==''){
       if(this.state.songs.length > 0){
         songs = this.displaySongs();
@@ -272,32 +275,34 @@ class Host extends Component{
       <div>
       <h3> Your unique party code is: </h3>
       <h2> {this.state.code} </h2>
+      <RaisedButton style={style} icon={< ActionHome/>} onClick={this.props.handler} />
       <br/>
       <form>
-      <label>
-      Create a Room: <br/>
-      <input
-      type="text"
-      onKeyPress={e => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          this.handleCreateSubmit(e);
-        }}}
-        placeholder="Room Name..."
-        value={this.state.newRoom}
-        onChange={this.handleCreateChange}
-        onSubmit={this.handleCreateSubmit}
-      />
-    <button onClick={this.handleCreateSubmit}>Create</button>
-      <br/>
-      </label>
+          <label>
+              Create a Room: <br/>
+              <TextField
+                type="text"
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.handleCreateSubmit(e);
+                  }}}
+                hintText="Room Name"
+                floatingLabelText="Room Name"
+                value={this.state.newRoom}
+                onChange={this.handleCreateChange}
+                onSubmit={this.handleCreateSubmit}
+              />
+              <RaisedButton label="Create" secondary={true} style={style} onClick={this.handleCreateSubmit}/>
+              <br/>
+          </label>
       </form>
-      <SelectRoom rooms={this.state.rooms} handler = {this.handleDeleteChange}/>
+      <SelectRoom rooms={this.state.rooms} handler = {this.handleDeleteChange} deleteRoomsHandler={this.handleDeleteSubmit}/>
       {search}
       {songs}
       {player}
       </div>
-    ) : (<Login loginHandler = {this.loginHandler}/>)
+    ) : (<Login loginHandler = {this.loginHandler} handler={this.props.handler}/>)
     return (
       <div className='Host'>
         {component}

@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { RaisedButton } from 'material-ui';
+import ActionHome from 'material-ui/svg-icons/action/home';
 
 class JoinRoom extends Component {
   constructor(props){
@@ -69,6 +71,7 @@ class JoinRoom extends Component {
             onSubmit={this.handleSubmit}
             />
           <br/>
+          <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
           <button onClick={this.handleSubmit}> Join </button>
         </form>
       </div>

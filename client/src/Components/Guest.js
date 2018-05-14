@@ -3,6 +3,8 @@ import Search from './Search.js';
 import JoinRoom from './JoinRoom.js';
 import Suggestion from './Suggestions.js';
 import SelectRoom from './SelectRoom.js';
+import ActionHome from 'material-ui/svg-icons/action/home';
+import { RaisedButton } from 'material-ui';
 
 //TODO Add username into database
 class Guest extends Component{
@@ -91,6 +93,7 @@ class Guest extends Component{
             <div>
               {welcome}
               <br/>
+              <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
               <SelectRoom rooms={this.state.rooms} handler = {this.roomSelectHandler}/>
             </div>
           );
@@ -110,7 +113,7 @@ class Guest extends Component{
         );
       }
     }
-    else component = (<JoinRoom loginHandler = {this.loginHandler}/>);
+    else component = (<JoinRoom handler={this.props.handler} loginHandler={this.loginHandler}/>);
     return (
       <div className='Guest'>
         {component}
