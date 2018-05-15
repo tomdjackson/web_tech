@@ -20,6 +20,8 @@ class Guest extends Component{
     }
     this.loginHandler = this.loginHandler.bind(this);
     this.roomSelectHandler = this.roomSelectHandler.bind(this);
+    this.getSongs = this.getSongs.bind(this);
+    this.suggestHandler = this.suggestHandler.bind(this);
   }
 
   getRooms(){
@@ -27,7 +29,7 @@ class Guest extends Component{
     .then(res=>{
       var roomArray = [];
       res.rooms.forEach((room) =>{
-        roomArray.push(room.key);
+        roomArray.push(room.name);
       });
       this.setState({rooms: roomArray});
     })
@@ -50,11 +52,21 @@ class Guest extends Component{
     this.getRooms();
   }
 
+  roomSelectHandler(v){
+    if(v>0){
+      this.setState({room: this.state.rooms[v-1]});
+      this.getSongs();
+    }
+    else this.setState({room: ''});
+  }
+
   getSongs(){
+    if(this.state.room === ''){
+      setTimeout(this.getSongs, 50);
+      return;
+    }
     this.callSongsApi()
-        .then(res=>{
-          this.setState({songs: res.songs});
-        })
+        .then(res=>{this.setState({songs:res.songs})})
         .catch(err => console.log(err));
   }
 
@@ -62,29 +74,15 @@ class Guest extends Component{
     const response = await fetch('/api/getsongs', {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({playlist: this.state.room})
+      body: JSON.stringify({playlist: this.state.room+this.state.code})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
   }
 
-  roomSelectHandler(v){
-    if(v>0){
-      this.setState({room: this.state.rooms[v-1]});
-    }
-    else this.setState({room: '', songs: []});
-  }
-
-  getSuggestions(){
-    //TODO work out a better place to put this function
-    this.getSongs();
-    const options = this.state.songs.map(r => (
-      <li key={r.id}>
-        <Suggestion song={r} room={this.state.room}/>
-      </li>
-    ));
-    return <ul>{options}</ul>;
+  suggestHandler(){
+    this.setState(this.state);
   }
 
   render(){
@@ -94,21 +92,23 @@ class Guest extends Component{
               {welcome}
               <br/>
               <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
+              <br/>
               <SelectRoom rooms={this.state.rooms} handler = {this.roomSelectHandler}/>
             </div>
           );
     if(this.state.isLoggedIn){
       if(this.state.room !== ''){
-        var suggestions = this.getSuggestions();
         component = (
           <div>
             {welcome}
             <br/>
+            <RaisedButton icon={<ActionHome/>} onClick={this.props.handler} />
+            <br/>
             <SelectRoom rooms={this.state.rooms} handler = {this.roomSelectHandler}/>
             <br/>
-            <Search room={this.state.room}/>
+            <Search room={this.state.room} code={this.state.code}/>
             <br/>
-            {suggestions}
+            <Suggestion songs={this.state.songs} room={this.state.room} code={this.state.code} handler={this.suggestHandler}/>
           </div>
         );
       }

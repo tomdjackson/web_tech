@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import logo from './logo.svg';
 import boogie from './boogie.png';
 import ballot from './ballot.png';
 import Host from './Components/Host.js'
 import Guest from './Components/Guest.js'
-import { Grow } from 'material-ui/transitions';
 import ('./App.css');
 
 
@@ -29,7 +27,7 @@ class App extends Component {
   handleGuestSubmit(e){
     this.setState({isGuest: true});
   }
-    
+
   handleReturnHome() {
     this.setState({isHost: false, isGuest:false});
   }
@@ -48,7 +46,7 @@ class App extends Component {
         </div>
       );
     }
-    else if(this.state.isGuest) component = <Guest handler={this.handleReturnHome}/> 
+    else if(this.state.isGuest) component = <Guest handler={this.handleReturnHome}/>
     else if (this.state.isHost) component = <Host handler={this.handleReturnHome}/>;
     return (
       <MuiThemeProvider>

@@ -5,6 +5,17 @@ ul{
 }
 
 .Thumb{
-  height:40px;
-  width:60px;
+  width:40%;
+}
+
+.Voting{
+  display: inline-block;
+}
+
+.SongInfo{
+  display: inline-block;
+}
+
+.VoteButton{
+  display: inline-block;
 }

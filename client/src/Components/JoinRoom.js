@@ -69,13 +69,18 @@ class JoinRoom extends Component {
             floatingLabelText="Enter Your Name"
             maxLength = "10"
             name="name"
+            onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  this.handleSubmit(e);
+            }}}
             value ={this.state.name}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}
           />
           <br/>
           <RaisedButton icon={< ActionHome/>} style={style} onClick={this.props.handler} />
-          <RaisedButton label="Join" style={style} onClick={this.handleSubmit}/> 
+          <RaisedButton label="Join" style={style} onClick={this.handleSubmit}/>
         </form>
       </div>
     );

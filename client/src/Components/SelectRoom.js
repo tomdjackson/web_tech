@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
 
 class SelectRoom extends Component{
   constructor(props){
@@ -18,14 +17,12 @@ class SelectRoom extends Component{
   }
 
   render(){
-    const deleteStyle = {margin: 12, marginLeft: -20, height: 24, width: 24, padding: 20}
-    const buttonStyle = {marginTop: 10, marginLeft: -7, position: "fixed"}
     return(
       <div>
       <form>
         <label style={{marginLeft: -140,}}>
           Select a Room: <br/>
-          <DropDownMenu 
+          <DropDownMenu
             value={this.state.value}
             onChange={this.handleChange}
             style = {{width: 303, marginLeft: -122}}
@@ -35,9 +32,7 @@ class SelectRoom extends Component{
               <MenuItem key={index+1} value={index+1} primaryText={room}/>
             )}
           </DropDownMenu>
-          
-          <RaisedButton label="Delete" style={deleteStyle, buttonStyle} onClick={this.props.deleteRoomsHandler}/>
-        
+
         </label>
       </form>
       </div>

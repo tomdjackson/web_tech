@@ -1,23 +1,30 @@
 import React, {Component} from 'react';
 import "./Results.css"
+import {List, ListItem} from 'material-ui/List';
+import Paper from 'material-ui/Paper';
 
 class Result extends Component{
-  constructor(props){
-    super(props);
+  constructor(){
+    super();
+    this.state={
+      song: ''
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(){
+  handleSubmit = function(r){
     //add song to suggesitons db
     fetch('/api/addsong', {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ id: this.props.result.id,
-              title: this.props.result.title,
-              link: this.props.result.link,
-              thumbnail: this.props.result.thumbnails.default.url,
-              playlist: this.props.room
-            })
+      body: JSON.stringify({
+        key: r.id+this.props.room+this.props.code,
+        id: r.id,
+        title: r.title,
+        link: r.link,
+        thumbnail: r.thumbnails.default.url,
+        playlist: this.props.room+this.props.code
+      })
     }).then(function(response){
       return response.json();
     }).then(function(res){
@@ -29,14 +36,41 @@ class Result extends Component{
   }
 
   render(){
+    const style = {
+      maxHeight: 200,
+      width: '80%',
+      overflow: 'auto',
+      margin: 20,
+      textAlign: 'center',
+      display: 'inline-block'
+    };
+    const options = this.props.results.map(r => (
+      <Item r={r} handler={this.handleSubmit}/>
+    ));
     return (
-      <div className="Result" key={this.props.result.id}>
-        <img src={this.props.result.thumbnails.default.url} alt={this.props.result.id} className="thumb" height="40" width="40"/>
-        <h4>{this.props.result.title}</h4>
-        <p>{this.props.result.description}</p>
+      <Paper style={style} zDepth={2}>
+        Search Results
+        <List style={{maxHeight: '100%', overflow: 'auto'}}>
+          {options}
+        </List>
+      </Paper>
+    );
+  }
+}
+
+class Item extends Component {
+  handleClick = () => {
+    this.props.handler(this.props.r);
+  }
+
+  render() {
+    return (
+      <ListItem key={"result" + this.props.r.id} onClick={this.handleClick}>
+        <img src={this.props.r.thumbnails.default.url} alt={this.props.r.key} className="thumb" height="40" width="40"/>
+        <h4>{this.props.r.title}</h4>
+        <p>{this.props.r.description}</p>
         <br/>
-        <button onClick={this.handleSubmit}>Suggest</button>
-      </div>
+      </ListItem>
     )
   }
 }

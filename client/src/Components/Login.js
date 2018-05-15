@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {RaisedButton, IconButton, TextField} from 'material-ui';
-import { Form, ButtonToolbar, Col, ControlLabel, Checkbox, FormGroup, FormControl, Button } from 'react-bootstrap';
+import {RaisedButton, TextField} from 'material-ui';
 import ActionHome from 'material-ui/svg-icons/action/home';
 
 class Login extends Component {
@@ -30,7 +29,6 @@ class Login extends Component {
     e.preventDefault();
     this.callLoginApi()
         .then(res=>{
-          console.log(res.success);
           if(res.success) this.props.loginHandler(this.state.username);
           else {
             console.log("incorrect username or password");
@@ -104,7 +102,7 @@ class Login extends Component {
     return (
       <div className="login" style={centreStyled}>
         <h2> Login as a Host </h2>
-        <TextField 
+        <TextField
                 className ={showError('username') ? "error":""}
                 type="text"
                 hintText="Username"
@@ -113,11 +111,10 @@ class Login extends Component {
                 name = "username"
                 onChange={this.handleChange}
                 onSubmit={this.handleLoginSubmit}
-                onBlur={this.handleBlur('username')} 
+                onBlur={this.handleBlur('username')}
         /><br />
-        <TextField 
+        <TextField
                 className ={showError('password') ? "error":""}
-                type="text"
                 hintText="Password"
                 floatingLabelText="Password"
                 type="password"
@@ -130,9 +127,9 @@ class Login extends Component {
                 name = "password"
                 onChange={this.handleChange}
                 onSubmit={this.handleLoginSubmit}
-                onBlur={this.handleBlur('password')} 
+                onBlur={this.handleBlur('password')}
         /><br />
-        <RaisedButton style={style} icon={< ActionHome/>} onClick={this.props.handler} />
+        <RaisedButton style={style} icon={<ActionHome/>} onClick={this.props.handler} />
         <RaisedButton label="Sign In" secondary={true} disabled={isDisabled} style={style} onClick={this.handleLoginSubmit}/>
         <RaisedButton label="Register" disabled={isDisabled} style={style} onClick={this.handleRegisterSubmit}/>
       </div>

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import Result from './Result.js';
 import './Results.css'
-import {List, ListItem} from 'material-ui/List';
 import {TextField, RaisedButton} from 'material-ui';
-import Paper from 'material-ui/Paper';
 
 const youtubeSearch = require('youtube-search');
-
 
 const opts = {
   maxResults: 7,
@@ -26,12 +23,15 @@ class Search extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handler = this.handler.bind(this);
-    this.getResults = this.getResults.bind(this);
   }
 
   handleChange(e) {
     this.setState({search: e.target.value});
     this.setState({results:[], hasSearch:false});
+  }
+
+  handler(e){
+    this.setState({search:'', results:[], hasSearch:false});
   }
 
   handleSubmit(e) {
@@ -49,38 +49,10 @@ class Search extends Component {
     else this.setState({hasSearch:false});
   }
 
-  handler(e){
-    this.setState({search:'', results:[], hasSearch:false});
-  }
-
-  getResults(){
-    const style = {
-      maxHeight: 200,
-      width: '80%',
-      overflow: 'auto',
-      margin: 20,
-      textAlign: 'center',
-      display: 'inline-block'
-    };
-    const options = this.state.results.map(r => (
-      <ListItem key={r.id}>
-        <Result key={r.id} handler={this.handler} result={r} room={this.props.room}/>
-      </ListItem>
-    ));
-    return (
-        <Paper style={style} zDepth={1}>
-          Search Results
-          <List style={{maxHeight: '100%', overflow: 'auto'}}>
-            {options}
-          </List>
-        </Paper>
-    );
-  }
-
   render() {
     const style = {margin: 12};
     var element = <p>No songs found.</p>;
-      if(this.state.results.length>0) element = this.getResults();
+      if(this.state.results.length>0) element = <Result handler={this.handler} results={this.state.results} room={this.props.room} code={this.props.code}/>
       else if(!this.state.hasSearch) element = null;
       return (
         <div className="Search">
@@ -99,7 +71,6 @@ class Search extends Component {
                   onChange={this.handleChange}
                   onSubmit={this.handleSubmit}
                 />
-
                 <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSubmit}/>
             </label>
           </form>
@@ -109,7 +80,7 @@ class Search extends Component {
         </div>
       );
   }
-      
+
 }
 
 export default Search;
