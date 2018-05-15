@@ -4,7 +4,9 @@ import './Results.css'
 import {List, ListItem} from 'material-ui/List';
 import {TextField, RaisedButton} from 'material-ui';
 import Paper from 'material-ui/Paper';
+
 const youtubeSearch = require('youtube-search');
+
 
 const opts = {
   maxResults: 7,
@@ -66,12 +68,12 @@ class Search extends Component {
       </ListItem>
     ));
     return (
-      <Paper style={style} zDepth={1}>
-        Search Results
-        <List style={{maxHeight: '100%', overflow: 'auto'}}>
-          {options}
-        </List>
-      </Paper>
+        <Paper style={style} zDepth={1}>
+          Search Results
+          <List style={{maxHeight: '100%', overflow: 'auto'}}>
+            {options}
+          </List>
+        </Paper>
     );
   }
 

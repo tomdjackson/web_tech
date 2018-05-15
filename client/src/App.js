@@ -6,6 +6,7 @@ import boogie from './boogie.png';
 import ballot from './ballot.png';
 import Host from './Components/Host.js'
 import Guest from './Components/Guest.js'
+import { Grow } from 'material-ui/transitions';
 import ('./App.css');
 
 
@@ -47,17 +48,16 @@ class App extends Component {
         </div>
       );
     }
-    else if(this.state.isGuest) component = <Guest handler={this.handleReturnHome}/>
+    else if(this.state.isGuest) component = <Guest handler={this.handleReturnHome}/> 
     else if (this.state.isHost) component = <Host handler={this.handleReturnHome}/>;
     return (
       <MuiThemeProvider>
       <div className="App">
-      <header className="App-header">
-      <img src={boogie} className="App-logo-balls" alt="boogie" />
-      <img src={logo} className="App-logo" alt="logo" />
-      <img src={ballot} className="App-logo-balls" alt="ballot" />
-      </header>
-      {component}
+          <header className="App-header">
+              <img src={boogie} className="App-logo-left" alt="boogie" />
+              <img src={ballot} className="App-logo-right" alt="ballot" />
+          </header>
+          {component}
       </div>
       </MuiThemeProvider>
     );
