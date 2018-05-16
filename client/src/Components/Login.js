@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {RaisedButton, TextField} from 'material-ui';
 import ActionHome from 'material-ui/svg-icons/action/home';
+import './../css/Host.css'
 
 class Login extends Component {
   constructor(props){
@@ -91,8 +92,6 @@ class Login extends Component {
 
   render() {
     const errors = this.validate(this.state.username, this.state.password);
-    const style = { margin: 12};
-    const centreStyled = { maxWidth: 400, margin: '0 auto 10px' }
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     const showError = (field) =>{
       const hasError = errors[field];
@@ -100,7 +99,7 @@ class Login extends Component {
       return hasError ? shouldShow: false;
     }
     return (
-      <div className="login" style={centreStyled}>
+      <div className="Login">
         <h2> Login as a Host </h2>
         <TextField
                 className ={showError('username') ? "error":""}
@@ -129,9 +128,9 @@ class Login extends Component {
                 onSubmit={this.handleLoginSubmit}
                 onBlur={this.handleBlur('password')}
         /><br />
-        <RaisedButton style={style} icon={<ActionHome/>} onClick={this.props.handler} />
-        <RaisedButton label="Sign In" secondary={true} disabled={isDisabled} style={style} onClick={this.handleLoginSubmit}/>
-        <RaisedButton label="Register" disabled={isDisabled} style={style} onClick={this.handleRegisterSubmit}/>
+        <RaisedButton icon={<ActionHome/>} onClick={this.props.handler} />
+        <RaisedButton label="Sign In" secondary={true} disabled={isDisabled} onClick={this.handleLoginSubmit}/>
+        <RaisedButton label="Register" disabled={isDisabled} onClick={this.handleRegisterSubmit}/>
       </div>
     );
   }

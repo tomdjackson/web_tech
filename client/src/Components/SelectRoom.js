@@ -20,12 +20,11 @@ class SelectRoom extends Component{
     return(
       <div>
       <form>
-        <label style={{marginLeft: -140,}}>
+        <label>
           Select a Room: <br/>
           <DropDownMenu
             value={this.state.value}
             onChange={this.handleChange}
-            style = {{width: 303, marginLeft: -122}}
           >
             <MenuItem value={0} primaryText ="Select"/>
             {this.props.rooms.map((room, index) =>

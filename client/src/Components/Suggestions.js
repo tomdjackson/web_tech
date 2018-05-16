@@ -5,13 +5,13 @@ import Paper from 'material-ui/Paper';
 import downvote from './../svg/arrow_downward.svg';
 import upvote from './../svg/arrow_upward.svg';
 import './../App.css'
-import './Results.css'
+import './../css/Results.css'
 
 class Suggestions extends Component{
   constructor(props){
     super(props);
     this.state = {
-      id: ''
+      key: ''
     };
     this.handleUpvoteSubmit = this.handleUpvoteSubmit.bind(this);
     this.callUpvoteAPI = this.callUpvoteAPI.bind(this);
@@ -19,39 +19,40 @@ class Suggestions extends Component{
     this.callDownvoteAPI = this.callDownvoteAPI.bind(this);
   }
 
-  handleUpvoteSubmit(e){
-    this.setState({id: e.key});
-    this.callUpvoteAPI()
-    .then(res=> {
-      console.log(res.message);
-    }).catch(err => console.log(err));
-    this.setState({id: ''});
-  }
-  handleDownvoteSubmit(e){
-    this.setState({id: e.key});
-    this.callDownvoteAPI()
-    .then(res=> {
-      console.log(res.message);
-    }).catch(err => console.log(err));
-    this.setState({id: ''});
+  componentWillUnmount(){
+    if(this.timeout) clearTimeout(this.timeout)
   }
 
-  callUpvoteAPI = async () => {
-    console.log(this.state.id+this.props.room+this.props.code);
+  handleUpvoteSubmit(key){
+    this.callUpvoteAPI(key)
+    .then(res=> {
+      console.log(res.message);
+    }).catch(err => console.log(err));
+  }
+
+  handleDownvoteSubmit(key){
+    this.callDownvoteAPI(key)
+    .then(res=> {
+      console.log(res.message);
+    }).catch(err => console.log(err));
+  }
+
+  callUpvoteAPI = async (key) => {
     const response = await fetch('/api/upvote', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({key: this.state.id+this.props.room+this.props.code})
+      body: JSON.stringify({key: key})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
     return body;
   }
-  callDownvoteAPI = async () => {
+
+  callDownvoteAPI = async (key) => {
     const response = await fetch('/api/downvote', {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({key: this.state.id+this.props.room+this.props.code})
+      body: JSON.stringify({key: key})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -59,36 +60,32 @@ class Suggestions extends Component{
   }
 
   render() {
-    const style = {
-      height: 200,
-      width: '80%',
-      overflow: 'auto',
-      margin: 20,
-      textAlign: 'center',
-      display: 'inline-block',
-    };
     const songs = this.props.songs.map(r => (
-      <ListItem disabled={true}>
-          <div className="Voting">
-            <IconButton key={"suggestion"+r.key} className="VoteButton" tooltip="Font Icon" onClick={this.handleUpvoteSubmit}>
-              <img src={upvote} alt='upvote' className="upvote"/>
-            </IconButton>
-            {r.votes}
-            <IconButton key={r.key} className="VoteButton" tooltip="Font Icon" onClick={this.handleDownvoteSubmit}>
-              <img src={downvote} alt='downvote' className="downvote"/>
-            </IconButton>
+      <ListItem disabled={true} key={r.key}>
+        <div className="Voting">
+          <IconButton key={"upvote"+r.key} className="VoteButton" tooltip="Upvote" onClick={() => this.handleUpvoteSubmit(r.key)}>
+            <img src={upvote} alt='upvote' className="upvote"/>
+          </IconButton>
+          <p className="Votes">{r.votes}</p>
+          <IconButton key={"downvote"+r.key} className="VoteButton" tooltip="Downvote" onClick={() => this.handleDownvoteSubmit(r.key)}>
+            <img src={downvote} alt='downvote' className="downvote"/>
+          </IconButton>
+        </div>
+        <div className= "SongInfo">
+          <div className="Thumb">
+            <img src={r.thumbnail} alt={r.key}/>
           </div>
-          <div className="SongInfo">
-            <img src={r.thumbnail} alt={r.key} className="thumb"/>
-            {r.title}
+          <div className="SongTitle">
+            <p>{r.title}</p>
           </div>
+        </div>
       </ListItem>
     ))
     //TODO change button depending on its state
     return(
-      <Paper style={style} zDepth={1}>
+      <Paper zDepth={1}>
         Suggestions
-        <List style={{maxHeight: '100%', overflow: 'auto'}}>
+        <List>
           {songs}
         </List>
       </Paper>

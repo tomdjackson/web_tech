@@ -8,7 +8,7 @@ import Player from './Player.js';
 import Suggestion from './Suggestions.js';
 import Search from './Search.js';
 import SelectRoom from './SelectRoom.js';
-import './../App.css';
+import './../css/Host.css';
 
 class Host extends Component{
   constructor(){
@@ -50,15 +50,15 @@ class Host extends Component{
       return;
     }
     this.callRoomsApi()
-        .then(res=>{
-          var roomArray = [];
-          console.log(res.rooms)
-          res.rooms.forEach((room) =>{
-            roomArray.push(room.name);
-          });
-          this.setState({rooms: roomArray});
-        })
-        .catch(err => console.log(err));
+    .then(res=>{
+      var roomArray = [];
+      console.log(res.rooms)
+      res.rooms.forEach((room) =>{
+        roomArray.push(room.name);
+      });
+      this.setState({rooms: roomArray});
+    })
+    .catch(err => console.log(err));
   }
 
   getSongs(){
@@ -67,20 +67,20 @@ class Host extends Component{
       return;
     }
     this.callSongsApi()
-        .then(res=>{
-          this.setState({songs:res.songs})
-          var index = 0;
-          var empty = false;
-          while(res.songs[index].played === 1 && !empty){
-            index++;
-            if(index>res.songs.length){
-              empty = true;
-              index = 0;
-            }
-          }
-          this.setState({song: this.state.songs[index]});
-        })
-        .catch(err => console.log(err));
+    .then(res=>{
+      this.setState({songs:res.songs})
+      var index = 0;
+      var empty = false;
+      while(res.songs[index].played === 1 && !empty){
+        index++;
+        if(index>res.songs.length){
+          empty = true;
+          index = 0;
+        }
+      }
+      this.setState({song: this.state.songs[index]});
+    })
+    .catch(err => console.log(err));
   }
 
   callSongsApi = async () =>{
@@ -107,8 +107,8 @@ class Host extends Component{
 
   getCode(){
     this.callPartyApi()
-        .then(res=>this.setState({code: res.code}))
-        .catch(err => console.log(err));
+    .then(res=>this.setState({code: res.code}))
+    .catch(err => console.log(err));
   }
 
   callPartyApi = async () => {
@@ -153,8 +153,8 @@ class Host extends Component{
         var newRoomArray = this.state.rooms;
         newRoomArray.push(this.state.newRoom);
         this.callPlaylistAPI()
-            .then(res=>console.log(res.message))
-            .catch(err=>console.log(err));
+        .then(res=>console.log(res.message))
+        .catch(err=>console.log(err));
         this.setState({newRoom: '', rooms: newRoomArray});
       }
       else console.log("room already exists");
@@ -191,15 +191,14 @@ class Host extends Component{
         }
       ]
     })
-
   }
 
   delete(){
     var newRoomArray = this.state.rooms;
     if(this.state.value>0){
       this.deletePlaylistApi()
-          .then(res=>console.log(res.message))
-          .catch(err=>console.log(err));
+      .then(res=>console.log(res.message))
+      .catch(err=>console.log(err));
       var i = this.state.value - 1;
       newRoomArray.splice(i, 1);
       this.setState({value: 0, rooms: newRoomArray, room: ''});
@@ -226,8 +225,8 @@ class Host extends Component{
 
   handleNext(){
     this.callPlayedSong()
-        .then(res=> { console.log(res.success) })
-        .catch(err=>console.log(err));
+    .then(res=> { console.log(res.success) })
+    .catch(err=>console.log(err));
     this.setState({song: ''});
     this.getSongs();
   }
@@ -236,9 +235,6 @@ class Host extends Component{
     var songs = '';
     var player = '';
     var search = '';
-    const deleteStyle = {margin: 12, marginLeft: -20, height: 24, width: 24, padding: 20}
-    const buttonStyle = {marginTop: 10, marginLeft: -7, display: 'inline-block'}
-    const style = {margin: 12};
     if(this.state.room!==''){
       songs = <Suggestion songs={this.state.songs} room={this.state.room} code={this.state.code} handler={this.updateSong}/>
       if(this.state.song!=='') player = <Player song={this.state.song} handleNext={this.handleNext}/>
@@ -246,42 +242,44 @@ class Host extends Component{
     }
     var component = this.state.isLoggedIn ? (
       <div>
-      <h3> Your unique party code is: </h3>
-      <h2> {this.state.code} </h2>
-      <RaisedButton style={style} icon={< ActionHome/>} onClick={this.props.handler} />
-      <br/>
-      <form>
+        <h3> Your unique party code is: </h3>
+        <h2> {this.state.code} </h2>
+        <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
+        <br/>
+        <form>
           <label>
-              Create a Room: <br/>
-              <TextField
-                type="text"
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    this.handleCreateSubmit(e);
-                  }}}
-                hintText="Room Name"
-                floatingLabelText="Room Name"
-                value={this.state.newRoom}
-                onChange={this.handleCreateChange}
-                onSubmit={this.handleCreateSubmit}
+            Create a Room: <br/>
+          <TextField
+            type="text"
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                this.handleCreateSubmit(e);
+              }}}
+              hintText="Room Name"
+              floatingLabelText="Room Name"
+              value={this.state.newRoom}
+              onChange={this.handleCreateChange}
+              onSubmit={this.handleCreateSubmit}
               />
-              <RaisedButton label="Create" secondary={true} style={style} onClick={this.handleCreateSubmit}/>
-              <br/>
+            <RaisedButton label="Create" secondary={true} onClick={this.handleCreateSubmit}/>
+            <br/>
           </label>
-      </form>
-      <SelectRoom rooms={this.state.rooms} handler = {this.handleDeleteChange} deleteRoomsHandler={this.handleDeleteSubmit}/>
-      <RaisedButton label="Delete" style={deleteStyle, buttonStyle} onClick={this.props.deleteRoomsHandler}/>
-      {search}
-      {songs}
-      {player}
+        </form>
+        <div className="RoomSelect">
+          <SelectRoom className="SelectRoom" rooms={this.state.rooms} handler = {this.handleDeleteChange}/>
+          <RaisedButton label="Delete" className="Delete" onClick={this.handleDeleteSubmit}/>
+        </div>
+        {search}
+        {songs}
+        {player}
       </div>
     ) : (<Login loginHandler = {this.loginHandler} handler={this.props.handler}/>)
     return (
       <div className='Host'>
         {component}
       </div>
-      )
-    }
+    )
   }
-  export default Host;
+}
+export default Host;

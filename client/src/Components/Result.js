@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import "./Results.css"
+import "./../css/Results.css"
 import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
+import './../css/Results.css'
 
 class Result extends Component{
   constructor(){
@@ -36,21 +37,13 @@ class Result extends Component{
   }
 
   render(){
-    const style = {
-      maxHeight: 200,
-      width: '80%',
-      overflow: 'auto',
-      margin: 20,
-      textAlign: 'center',
-      display: 'inline-block'
-    };
     const options = this.props.results.map(r => (
       <Item r={r} handler={this.handleSubmit}/>
     ));
     return (
-      <Paper style={style} zDepth={2}>
+      <Paper zDepth={3}>
         Search Results
-        <List style={{maxHeight: '100%', overflow: 'auto'}}>
+        <List >
           {options}
         </List>
       </Paper>

@@ -35,14 +35,12 @@ class App extends Component {
   //TODO make the logos responsive
   render() {
     var component = <p>failed.</p>;
-    const centreStyled = { maxWidth: 400, margin: '0 auto 10px' };
-    const style = {margin: 12};
     if (!this.state.isHost && !this.state.isGuest){
       component = (
-        <div className="well" style={centreStyled}>
+        <div className="Well">
             <h3>I am a...</h3>
-            <RaisedButton label="Host" secondary={true} style={style} onClick={this.handleHostSubmit}/>
-            <RaisedButton label="Guest" style={style} onClick={this.handleGuestSubmit}/>
+            <RaisedButton label="Host" secondary={true} onClick={this.handleHostSubmit}/>
+            <RaisedButton label="Guest" onClick={this.handleGuestSubmit}/>
         </div>
       );
     }
@@ -52,8 +50,8 @@ class App extends Component {
       <MuiThemeProvider>
       <div className="App">
           <header className="App-header">
-              <img src={boogie} className="App-logo-left" alt="boogie" />
-              <img src={ballot} className="App-logo-right" alt="ballot" />
+              <img src={boogie} className="App-logo" alt="boogie" />
+              <img src={ballot} className="App-logo" alt="ballot" />
           </header>
           {component}
       </div>

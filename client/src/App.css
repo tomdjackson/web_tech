@@ -1,12 +1,12 @@
 .App {
   text-align: center;
 }
-
+/*
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   max-height: 80px;
   max-width: 15%;
-}
+} */
 
 .App-header {
   background-color: #673AB7;
@@ -24,33 +24,25 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-/*
-  0% { transform: rotate(0deg); }
-    30% {transform: scale(1.4);}
-    50% {transform: scale(0.4)}
-  100% { transform: rotate(480deg); }
-*/
-}
-
-.App-logo-left{
-  max-width: 35%;
+.App-logo{
+  max-width: 25%;
   margin-bottom: 0;
-  margin-left: -4px;
-  margin-right: 0;
+  margin-left: 10%;
+  margin-right: 10%;
   margin-top: 0;
 }
 
-.App-logo-right{
-  max-width: 35%;
-  margin-bottom: 8px;
-  margin-left: 100px;
-  margin-right: 52px;
-  margin-top: 1px;
+.Well {
+  maxWidth: 400;
+  margin: '0 auto 10px';
 }
+
+RaisedButton{
+  margin: 12;
+}
+
 
 html {
   width: 100%;
-  height: 100%;  
+  height: 100%;
 }
-

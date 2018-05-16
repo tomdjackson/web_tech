@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Result from './Result.js';
-import './Results.css'
+import './../css/Results.css'
 import {TextField, RaisedButton} from 'material-ui';
 
 const youtubeSearch = require('youtube-search');
@@ -50,7 +50,6 @@ class Search extends Component {
   }
 
   render() {
-    const style = {margin: 12};
     var element = <p>No songs found.</p>;
       if(this.state.results.length>0) element = <Result handler={this.handler} results={this.state.results} room={this.props.room} code={this.props.code}/>
       else if(!this.state.hasSearch) element = null;
@@ -71,7 +70,7 @@ class Search extends Component {
                   onChange={this.handleChange}
                   onSubmit={this.handleSubmit}
                 />
-                <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSubmit}/>
+                <RaisedButton label="Search" secondary={true} onClick={this.handleSubmit}/>
             </label>
           </form>
           <div className="search-results">

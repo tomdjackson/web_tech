@@ -125,12 +125,15 @@ app.post('/api/getsongs', (req, res) =>{
 
 app.post('/api/played', (req, res) =>{
   console.log(req.body);
-  db.run("UPDATE songs SET played=? WHERE key=?", [1, req.body.key], (err, value)=>{
+  var played = 1;
+  db.run("UPDATE songs SET played=? WHERE key=?", [played, req.body.key], (err, value)=>{
     if(err) return console.error(err.message);
     console.log("here");
     res.send({success: true});
   })
 })
+
+
 
 app.post('/api/upvote', (req, res) => {
   console.log(req.body);

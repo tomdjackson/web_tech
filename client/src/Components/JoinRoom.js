@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { RaisedButton, TextField} from 'material-ui';
 import ActionHome from 'material-ui/svg-icons/action/home';
+import './../css/Host.css';
 
 class JoinRoom extends Component {
   constructor(props){
@@ -47,7 +48,6 @@ class JoinRoom extends Component {
   }
 
   render() {
-    const style = {margin: 12};
     return (
       <div className="joinRoom">
         <h2> Join a Party </h2>
@@ -79,8 +79,8 @@ class JoinRoom extends Component {
             onSubmit={this.handleSubmit}
           />
           <br/>
-          <RaisedButton icon={< ActionHome/>} style={style} onClick={this.props.handler} />
-          <RaisedButton label="Join" style={style} onClick={this.handleSubmit}/>
+          <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
+          <RaisedButton label="Join" onClick={this.handleSubmit}/>
         </form>
       </div>
     );
