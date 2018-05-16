@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Result from './Result.js';
 import './../css/Results.css'
+import loading from './../svg/logo.svg';
 import {TextField, RaisedButton} from 'material-ui';
-
 const youtubeSearch = require('youtube-search');
-
 const opts = {
   maxResults: 7,
   key: 'AIzaSyCdK4Fco6BNjFa5XCpuBQUZdkxaudQLk48',
@@ -25,6 +24,10 @@ class Search extends Component {
     this.handler = this.handler.bind(this);
   }
 
+  componentWillUnmount(){
+    if(this.timeout) clearTimeout(this.timeout)
+  }
+
   handleChange(e) {
     this.setState({search: e.target.value});
     this.setState({results:[], hasSearch:false});
@@ -40,7 +43,6 @@ class Search extends Component {
     this.setState({search:e.target.value});
     if(this.state.search.length > 0) {
       youtubeSearch(this.state.search, opts, (err, res) => {
-        //TODO render a loading animation for this?
         if(err) return console.log(err);
         this.setState({results: res});
       });
@@ -50,9 +52,9 @@ class Search extends Component {
   }
 
   render() {
-    var element = <p>No songs found.</p>;
+    var element = null;
       if(this.state.results.length>0) element = <Result handler={this.handler} results={this.state.results} room={this.props.room} code={this.props.code}/>
-      else if(!this.state.hasSearch) element = null;
+      if(this.state.search.length>0 && !this.state.hasSearch) element = element = <img alt="loading" src={loading} className="loading"/>
       return (
         <div className="Search">
           <form>

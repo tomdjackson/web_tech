@@ -187,7 +187,6 @@ class Host extends Component{
         },
         {
           label: 'Cancel',
-          onClick: () => alert("Cancel")
         }
       ]
     })
@@ -197,7 +196,7 @@ class Host extends Component{
     var newRoomArray = this.state.rooms;
     if(this.state.value>0){
       this.deletePlaylistApi()
-      .then(res=>console.log(res.message))
+      .then(res=>{})
       .catch(err=>console.log(err));
       var i = this.state.value - 1;
       newRoomArray.splice(i, 1);
@@ -212,7 +211,6 @@ class Host extends Component{
   }
 
   callPlayedSong = async () => {
-    console.log(this.state.song.key);
     const response = await fetch('/api/played', {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -225,20 +223,19 @@ class Host extends Component{
 
   handleNext(){
     this.callPlayedSong()
-    .then(res=> { console.log(res.success) })
+    .then(res=> {})
     .catch(err=>console.log(err));
     this.setState({song: ''});
     this.getSongs();
   }
 
   render(){
-    var songs = '';
-    var player = '';
-    var search = '';
+    var songs = '', player = '', search = '', deletebutton='';
     if(this.state.room!==''){
       songs = <Suggestion songs={this.state.songs} room={this.state.room} code={this.state.code} handler={this.updateSong}/>
       if(this.state.song!=='') player = <Player song={this.state.song} handleNext={this.handleNext}/>
       search = <Search room={this.state.room} code={this.state.code}/>
+      deletebutton = <RaisedButton label="Delete" className="Delete" onClick={this.handleDeleteSubmit}/>
     }
     var component = this.state.isLoggedIn ? (
       <div>
@@ -268,7 +265,7 @@ class Host extends Component{
         </form>
         <div className="RoomSelect">
           <SelectRoom className="SelectRoom" rooms={this.state.rooms} handler = {this.handleDeleteChange}/>
-          <RaisedButton label="Delete" className="Delete" onClick={this.handleDeleteSubmit}/>
+          {deletebutton}
         </div>
         {search}
         {songs}

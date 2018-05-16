@@ -7,7 +7,6 @@ import Host from './Components/Host.js'
 import Guest from './Components/Guest.js'
 import ('./App.css');
 
-
 class App extends Component {
   constructor(){
     super();
@@ -32,7 +31,6 @@ class App extends Component {
     this.setState({isHost: false, isGuest:false});
   }
 
-  //TODO make the logos responsive
   render() {
     var component = <p>failed.</p>;
     if (!this.state.isHost && !this.state.isGuest){

@@ -6,7 +6,6 @@ import SelectRoom from './SelectRoom.js';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import { RaisedButton } from 'material-ui';
 
-//TODO Add username into database
 class Guest extends Component{
   constructor(){
     super();

@@ -29,7 +29,6 @@ class Result extends Component{
     }).then(function(response){
       return response.json();
     }).then(function(res){
-      console.log(res.message);
     }).catch(function(err){
       console.error(err.message);
     });

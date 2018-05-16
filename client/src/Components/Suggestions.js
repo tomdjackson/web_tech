@@ -26,14 +26,12 @@ class Suggestions extends Component{
   handleUpvoteSubmit(key){
     this.callUpvoteAPI(key)
     .then(res=> {
-      console.log(res.message);
     }).catch(err => console.log(err));
   }
 
   handleDownvoteSubmit(key){
     this.callDownvoteAPI(key)
     .then(res=> {
-      console.log(res.message);
     }).catch(err => console.log(err));
   }
 

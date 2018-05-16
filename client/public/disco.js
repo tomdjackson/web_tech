@@ -3,7 +3,6 @@
 
 const pi = Math.PI;
 const scaleFactor = document.documentElement.clientWidth/1900;
-console.log(scaleFactor);
 const radius = 50 * scaleFactor; // Size of the ball
 const squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the ball
 const precision = 19.55 * scaleFactor; // The precision of the rotation of the ball
@@ -39,22 +38,22 @@ for (var t = 0; t < pi; t+=inc) {
     tile.style.height = squareSize + "px";
     tile.style.backgroundColor = "rgb(" + randomNumber(130, 255) + "," + randomNumber(130, 255) + "," + randomNumber(130, 255) + ")"; // Generates the funky colours you see on the screen
     tile.style.backfaceVisibility = "hidden";
-    
+
     tile.style.webkitTransformOrigin = "0 0 0";
     tile.style.webkitTransform = "rotate(" + i + "rad) rotateY(" + t + "rad)";
     tile.style.webkitAnimation = "reflect 2s linear infinite";
     tile.style.webkitAnimationDelay = String(randomNumber(0,20)/10) + "s";
-      
+
     tile.style.transformOrigin = "0 0 0";
     tile.style.transform = "rotate(" + i + "rad) rotateY(" + t + "rad)";
     tile.style.animation = "reflect 2s linear infinite";
     tile.style.animationDelay = String(randomNumber(0,20)/10) + "s";
-      
+
     square.appendChild(tile);
     square.className = "square";
     square.style.webkitTransform = "translateX(" + Math.ceil(radius * Math.cos(i) * Math.sin(t)) + "px) translateY(" + radius * Math.sin(i) * Math.sin(t) + "px) translateZ(" + radius * Math.cos(t) + "px)";
     square.style.transform = "translateX(" + radius * Math.cos(i) * Math.sin(t) + "px) translateY(" + radius * Math.sin(i) * Math.sin(t) + "px) translateZ(" + radius * Math.cos(t) + "px)";
-      
+
     discoBall.appendChild(square);
   }
 }
