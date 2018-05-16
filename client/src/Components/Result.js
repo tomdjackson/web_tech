@@ -34,7 +34,7 @@ class Result extends Component{
 
   render(){
     const options = this.props.results.map(r => (
-      <Item r={r} handler={this.handleSubmit}/>
+      <Item key={r.id} r={r} handler={this.handleSubmit}/>
     ));
     return (
       <Paper
@@ -64,7 +64,7 @@ class Item extends Component {
 
   render() {
     return (
-      <ListItem key={"result" + this.props.r.id} onClick={this.handleClick}>
+      <ListItem key={"result" + this.props.r.key} onClick={this.handleClick}>
         <img src={this.props.r.thumbnails.default.url} alt={this.props.r.key} className="thumb" height="40" width="40"/>
         <h4>{this.props.r.title}</h4>
         <p>{this.props.r.description}</p>

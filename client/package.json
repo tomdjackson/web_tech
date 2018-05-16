@@ -3,19 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "ajv": "^6.4.0",
     "googleapis": "^29.0.0",
     "material-ui": "^0.20.0",
     "react": "^16.3.1",
     "react-confirm-alert": "^2.0.2",
     "react-dom": "^16.3.2",
-    "react-native": "^0.55.3",
     "react-scripts": "1.1.4",
+    "react-youtube": "^7.6.0",
     "youtube-search": "^1.1.0"
   },
   "scripts": {
     "start": "set HTTPS=true&&react-scripts start",
-    "build": "react-scripts build",
+    "build": "set HTTPS=true&&react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

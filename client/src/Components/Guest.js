@@ -4,7 +4,7 @@ import JoinRoom from './JoinRoom.js';
 import Suggestion from './Suggestions.js';
 import SelectRoom from './SelectRoom.js';
 import ActionHome from 'material-ui/svg-icons/action/home';
-import { RaisedButton } from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class Guest extends Component{
   constructor(){

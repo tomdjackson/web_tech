@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import Result from './Result.js';
 import './../css/Results.css'
 import loading from './../svg/logo.svg';
-import {TextField, RaisedButton} from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 const youtubeSearch = require('youtube-search');
 const opts = {
   maxResults: 7,
