@@ -88,9 +88,9 @@ class Guest extends Component{
     var welcome = (<h3>Hello {this.state.username}. Welcome to {this.state.code} </h3>);
     var component = (
             <div>
-              {welcome}
+              <RaisedButton icon={< ActionHome/>} className='HomeButton' onClick={this.props.handler} />
               <br/>
-              <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
+              {welcome}
               <br/>
               <SelectRoom rooms={this.state.rooms} handler = {this.roomSelectHandler}/>
             </div>
@@ -99,9 +99,9 @@ class Guest extends Component{
       if(this.state.room !== ''){
         component = (
           <div>
-            {welcome}
+            <RaisedButton icon={<ActionHome/>} className='HomeButton' onClick={this.props.handler} />
             <br/>
-            <RaisedButton icon={<ActionHome/>} onClick={this.props.handler} />
+            {welcome}
             <br/>
             <SelectRoom rooms={this.state.rooms} handler = {this.roomSelectHandler}/>
             <br/>

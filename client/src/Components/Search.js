@@ -72,11 +72,12 @@ class Search extends Component {
       if(this.state.results.length>0) element = <Result handler={this.handler} results={this.state.results} room={this.props.room} code={this.props.code}/>
       if(this.state.search.length>0 && !this.state.hasSearch) element = element = <img alt="loading" src={loading} className="loading"/>
       return (
-        <div className="Search">
+        <div>
           <form>
             <label>
                 <TextField
                   type="text"
+                  className="SearchBar"
                   onKeyPress={e => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -91,7 +92,7 @@ class Search extends Component {
                   underlineFocusStyle = {styles.underlineStyle}
                   floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
                 />
-                <RaisedButton label="Search" secondary={true} onClick={this.handleSubmit}/>
+                <RaisedButton label="Search" className="SearchButton" secondary={true} onClick={this.handleSubmit}/>
             </label>
           </form>
           <div className="search-results">

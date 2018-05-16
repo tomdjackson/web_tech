@@ -47,6 +47,40 @@ html {
   height: 100%;
 }
 
-.button {
-   color: #673AB7;  
+.HomeButton {
+    margin-top: 20px;
+    width: 100px;
+}
+
+.GuestButton {
+    margin-left:10px;
+}
+
+.LoginButton {
+    width: 123px;
+}
+
+.RegisterButton {
+    margin-left: 10px;
+    width: 123px;
+}
+
+.JoinButton {
+    width:200px;
+}
+
+.CreateButton {
+    position:fixed;
+    margin-top: 28px;
+    margin-left: 15px;
+}
+
+.SearchBar {
+    margin-left: 88px;
+}
+
+.SearchButton {
+    margin-top: 28px;
+    margin-left: 15px;
+    margin-right: -16px;
 }

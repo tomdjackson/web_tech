@@ -10,7 +10,6 @@ var squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the b
 var precision = 19.55; // The precision of the rotation of the ball
 discoBallLight.style.width = 100 * scaleFactor;
 discoBallLight.style.height = 100 * scaleFactor;
-console.log(discoBallLight.style.width);
 var inc = pi / precision;
 
 var currentRadius;

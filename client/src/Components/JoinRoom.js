@@ -72,6 +72,7 @@ class JoinRoom extends Component {
     }
     return (
       <div className="joinRoom">
+        <RaisedButton icon={< ActionHome/>} className='HomeButton' onClick={this.props.handler} />
         <h2> Join a Party </h2>
         <form>
           <TextField
@@ -107,8 +108,7 @@ class JoinRoom extends Component {
             floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
           />
           <br/>
-          <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
-          <RaisedButton label="Join" onClick={this.handleSubmit}/>
+          <RaisedButton label="Join Party" secondary={true} className='JoinButton' onClick={this.handleSubmit}/>
         </form>
       </div>
     );

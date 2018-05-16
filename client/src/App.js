@@ -38,7 +38,7 @@ class App extends Component {
         <div className="Well">
             <h3>I am a...</h3>
             <RaisedButton label="Host" secondary={true} onClick={this.handleHostSubmit}/>
-            <RaisedButton label="Guest" onClick={this.handleGuestSubmit}/>
+            <RaisedButton label="Guest" className="GuestButton" onClick={this.handleGuestSubmit}/>
         </div>
       );
     }

@@ -122,9 +122,9 @@ class Login extends Component {
     }
     return (
       <div className="Login">
+        <RaisedButton icon={<ActionHome/>} className='HomeButton' onClick={this.props.handler} /><br/>
         <h2> Login as a Host </h2>
         <TextField
-                className ={'textField'}
                 type="text"
                 hintText="Username"
                 floatingLabelText="Username"
@@ -138,7 +138,6 @@ class Login extends Component {
                 onBlur={this.handleBlur('username')}
         /><br />
         <TextField
-                className ={'textField'}
                 hintText="Password"
                 floatingLabelText="Password"
                 type="password"
@@ -156,9 +155,8 @@ class Login extends Component {
                 onSubmit={this.handleLoginSubmit}
                 onBlur={this.handleBlur('password')}
         /><br />
-        <RaisedButton icon={<ActionHome/>} onClick={this.props.handler} />
-        <RaisedButton label="Sign In" secondary={true} disabled={isDisabled} onClick={this.handleLoginSubmit}/>
-        <RaisedButton label="Register" disabled={isDisabled} onClick={this.handleRegisterSubmit}/>
+        <RaisedButton label="Sign In" secondary={true} className ={'LoginButton'} disabled={isDisabled} onClick={this.handleLoginSubmit}/>
+        <RaisedButton label="Register" className ={'RegisterButton'} disabled={isDisabled} onClick={this.handleRegisterSubmit}/>
       </div>
     );
   }

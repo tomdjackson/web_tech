@@ -53,7 +53,6 @@ class Host extends Component{
     this.callRoomsApi()
     .then(res=>{
       var roomArray = [];
-      console.log(res.rooms)
       res.rooms.forEach((room) =>{
         roomArray.push(room.name);
       });
@@ -251,14 +250,13 @@ class Host extends Component{
       songs = <Suggestion songs={this.state.songs} room={this.state.room} code={this.state.code} handler={this.updateSong}/>
       if(this.state.song!=='') player = <Player song={this.state.song} handleNext={this.handleNext}/>
       search = <Search room={this.state.room} code={this.state.code}/>
-      deletebutton = <RaisedButton label="Delete" className="Delete" onClick={this.handleDeleteSubmit}/>
+      deletebutton = <RaisedButton label="Delete Room" className="DeleteButton" onClick={this.handleDeleteSubmit}/>
     }
     var component = this.state.isLoggedIn ? (
       <div>
+        <RaisedButton icon={< ActionHome/>} className='HomeButton' onClick={this.props.handler} />
         <h3> Your unique party code is: </h3>
         <h2> {this.state.code} </h2>
-        <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />
-        <br/>
         <form>
           <label>
             Create a Room: <br/>
@@ -278,7 +276,7 @@ class Host extends Component{
             underlineFocusStyle = {styles.underlineStyle}
             floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
             />
-            <RaisedButton label="Create" secondary={true} onClick={this.handleCreateSubmit}/>
+            <RaisedButton label="Create" secondary={true} className='CreateButton' onClick={this.handleCreateSubmit}/>
             <br/>
           </label>
         </form>
