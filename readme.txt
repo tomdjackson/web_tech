@@ -1,7 +1,7 @@
 Ian,
 
 Install node dependencies and run:
-npm i -r && npm run build
+npm i -r && npm run start
 
 
 We have set up an account for you. You can log in as a host using the following username and password:
