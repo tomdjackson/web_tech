@@ -2,9 +2,11 @@
 // which gives the illusion of 'rotation'
 
 const pi = Math.PI;
-const radius = 50; // Size of the ball
-const squareSize = 6.5; // Size of each individual 'square' of the ball
-const precision = 19.55; // The precision of the rotation of the ball
+const scaleFactor = document.documentElement.clientWidth/1900;
+console.log(scaleFactor);
+const radius = 50 * scaleFactor; // Size of the ball
+const squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the ball
+const precision = 19.55 * scaleFactor; // The precision of the rotation of the ball
 const inc = pi / precision;
 const discoBall = document.getElementById("discoBall");
 
@@ -13,6 +15,13 @@ var circumference;
 var angleIncrement;
 var square;
 var squareTile;
+
+window.onresize = window.onload = function() {
+    scaleFactor = document.documentElement.clientWidth/1900;
+    radius = 50 * scaleFactor; // Size of the ball
+    squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the ball
+    precision = 19.55 * scaleFactor; // The precision of the rotation of the ball
+}
 
 // Generates a div for each square used and applies the correct transform to it. This does require a lot of divs however memory footprint on Chrome didn't
 // seem to be affected too much!

@@ -61,6 +61,7 @@ iframe {
 }
 
 #discoBallLight {
+  max-width: 35%;
   width: 100px;
   height: 100px;
   position: absolute;
@@ -78,6 +79,7 @@ iframe {
 
 /* Styling for each individual square of the disco ball */
 .square {
+  max-width: 35%;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   position: absolute;
@@ -90,6 +92,7 @@ iframe {
 }
 
 #discoBallMiddle {
+  max-width: 35%;
   height: 100%;
   border-radius: 100%;
   background-color: #111;
