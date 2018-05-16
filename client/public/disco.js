@@ -2,12 +2,16 @@
 // which gives the illusion of 'rotation'
 
 const pi = Math.PI;
-const scaleFactor = document.documentElement.clientWidth/1900;
-const radius = 50 * scaleFactor; // Size of the ball
-const squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the ball
-const precision = 19.55 * scaleFactor; // The precision of the rotation of the ball
-const inc = pi / precision;
 const discoBall = document.getElementById("discoBall");
+const discoBallLight = document.getElementById("discoBallLight");
+var scaleFactor = document.documentElement.clientWidth/1900;
+var radius = 50 * scaleFactor; // Size of the ball
+var squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the ball
+var precision = 19.55; // The precision of the rotation of the ball
+discoBallLight.style.width = 100 * scaleFactor;
+discoBallLight.style.height = 100 * scaleFactor;
+console.log(discoBallLight.style.width);
+var inc = pi / precision;
 
 var currentRadius;
 var circumference;
@@ -15,11 +19,19 @@ var angleIncrement;
 var square;
 var squareTile;
 
-window.onresize = window.onload = function() {
-    scaleFactor = document.documentElement.clientWidth/1900;
-    radius = 50 * scaleFactor; // Size of the ball
-    squareSize = 6.5 * scaleFactor; // Size of each individual 'square' of the ball
-    precision = 19.55 * scaleFactor; // The precision of the rotation of the ball
+//// Continuously Update disco ball based on screen size - Commented out for now as it doesn't work as fully intended but still interesting to see the methodology
+//window.onresize = window.onload = function() {
+//    scaleFactor = document.documentElement.clientWidth/1900;
+//    radius = 50 * scaleFactor;
+//    squareSize = 6.5 * scaleFactor;
+//    const discoBallLight = document.getElementById('discoBallLight');
+//    discoBallLight.style.width = discoBallLight.style.width * scaleFactor;
+////    document.getElementById('discoBallLight').style.width = document.getElementById('discoBallLight').style.width * scaleFactor;
+////    precision = 19.55 * scaleFactor;
+//}
+
+function randomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Generates a div for each square used and applies the correct transform to it. This does require a lot of divs however memory footprint on Chrome didn't
@@ -38,26 +50,22 @@ for (var t = 0; t < pi; t+=inc) {
     tile.style.height = squareSize + "px";
     tile.style.backgroundColor = "rgb(" + randomNumber(130, 255) + "," + randomNumber(130, 255) + "," + randomNumber(130, 255) + ")"; // Generates the funky colours you see on the screen
     tile.style.backfaceVisibility = "hidden";
-
+    
     tile.style.webkitTransformOrigin = "0 0 0";
     tile.style.webkitTransform = "rotate(" + i + "rad) rotateY(" + t + "rad)";
     tile.style.webkitAnimation = "reflect 2s linear infinite";
     tile.style.webkitAnimationDelay = String(randomNumber(0,20)/10) + "s";
-
+      
     tile.style.transformOrigin = "0 0 0";
     tile.style.transform = "rotate(" + i + "rad) rotateY(" + t + "rad)";
     tile.style.animation = "reflect 2s linear infinite";
     tile.style.animationDelay = String(randomNumber(0,20)/10) + "s";
-
+      
     square.appendChild(tile);
     square.className = "square";
     square.style.webkitTransform = "translateX(" + Math.ceil(radius * Math.cos(i) * Math.sin(t)) + "px) translateY(" + radius * Math.sin(i) * Math.sin(t) + "px) translateZ(" + radius * Math.cos(t) + "px)";
     square.style.transform = "translateX(" + radius * Math.cos(i) * Math.sin(t) + "px) translateY(" + radius * Math.sin(i) * Math.sin(t) + "px) translateZ(" + radius * Math.cos(t) + "px)";
-
+      
     discoBall.appendChild(square);
   }
-}
-
-function randomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
