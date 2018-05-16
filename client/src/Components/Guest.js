@@ -15,7 +15,7 @@ class Guest extends Component{
       rooms: [],
       songs: [],
       username: '',
-      isLoggedIn: false
+      isLoggedIn: false,
     }
     this.loginHandler = this.loginHandler.bind(this);
     this.roomSelectHandler = this.roomSelectHandler.bind(this);

@@ -17,7 +17,8 @@ class Search extends Component {
     this.state = {
       results: [],
       hasSearch: false,
-      search: ''
+      search: '',
+      errorTextSearch: '',      
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,6 +32,10 @@ class Search extends Component {
   handleChange(e) {
     this.setState({search: e.target.value});
     this.setState({results:[], hasSearch:false});
+    
+    if (this.state.errorTextSearch != '') {
+        this.setState({errorTextSearch:''});
+    }
   }
 
   handler(e){
@@ -48,10 +53,21 @@ class Search extends Component {
       });
       this.setState({hasSearch:true});
     }
-    else this.setState({hasSearch:false});
+    else {
+      this.setState({hasSearch:false});
+      this.setState({errorTextSearch:'Enter a Song Name'});
+    }
   }
 
   render() {
+    const styles = {
+        underlineStyle: {
+          borderColor: '#673AB7',
+        },
+        floatingLabelFocusStyle: {
+          color: '#673AB7',
+        },
+    }
     var element = null;
       if(this.state.results.length>0) element = <Result handler={this.handler} results={this.state.results} room={this.props.room} code={this.props.code}/>
       if(this.state.search.length>0 && !this.state.hasSearch) element = element = <img alt="loading" src={loading} className="loading"/>
@@ -69,8 +85,11 @@ class Search extends Component {
                   hintText="Make a Suggestion"
                   floatingLabelText="Make a Suggestion"
                   value ={this.state.search}
+                  errorText = {this.state.errorTextSearch}
                   onChange={this.handleChange}
                   onSubmit={this.handleSubmit}
+                  underlineFocusStyle = {styles.underlineStyle}
+                  floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
                 />
                 <RaisedButton label="Search" secondary={true} onClick={this.handleSubmit}/>
             </label>

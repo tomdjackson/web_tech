@@ -9,12 +9,15 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
+      errorTextPassword: '',
+      errorTextUsername: '',
       touched: {
         username: false,
-        password: false
+        password: false,
       }
     };
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChangeUsername = this.handleChangeUsername.bind(this);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.handleRegisterSubmit = this.handleRegisterSubmit.bind(this);
     this.callLoginApi = this.callLoginApi.bind(this);
@@ -22,8 +25,19 @@ class Login extends Component {
   }
 
   //TODO Form validation
-  handleChange(e) {
+  handleChangeUsername(e) {
     this.setState({[e.target.name]: e.target.value});
+    if (this.state.errorTextUsername != '') {
+        this.setState({errorTextUsername: ''});
+    }
+  }
+    
+  handleChangePassword(e) {
+      this.setState({[e.target.name]: e.target.value});
+      if (this.state.password.length < 7) {
+          this.setState({errorTextPassword: 'Password too Short'});
+      }
+      else this.setState({errorTextPassword: ''});
   }
 
   handleLoginSubmit(e){
@@ -32,7 +46,7 @@ class Login extends Component {
         .then(res=>{
           if(res.success) this.props.loginHandler(this.state.username);
           else {
-            console.log("incorrect username or password");
+            this.setState({errorTextPassword: 'Username or Password Incorrect'});
             this.setState(({password: ''}));
           }
         })
@@ -55,7 +69,7 @@ class Login extends Component {
     this.callRegisterApi()
         .then(res=>{
           if(res.success) this.props.loginHandler(this.state.username);
-          else console.log("Username is taken");
+          this.setState({errorTextUsername: 'Username is Taken'});
         })
         .catch(err => console.log(err));
   }
@@ -83,7 +97,7 @@ class Login extends Component {
       password: password.length < 8
     };
   }
-
+  
   getValidationState(l) {
     if (l > 7) return 'success';
     else if (l > 0) return 'error';
@@ -91,6 +105,14 @@ class Login extends Component {
   }
 
   render() {
+    const styles = {
+        underlineStyle: {
+          borderColor: '#673AB7',
+        },
+        floatingLabelFocusStyle: {
+          color: '#673AB7',
+        },
+    }
     const errors = this.validate(this.state.username, this.state.password);
     const isDisabled = Object.keys(errors).some(x => errors[x]);
     const showError = (field) =>{
@@ -102,21 +124,25 @@ class Login extends Component {
       <div className="Login">
         <h2> Login as a Host </h2>
         <TextField
-                className ={showError('username') ? "error":""}
+                className ={'textField'}
                 type="text"
                 hintText="Username"
                 floatingLabelText="Username"
                 value={this.state.username}
+                errorText={this.state.errorTextUsername}
                 name = "username"
-                onChange={this.handleChange}
+                underlineFocusStyle = {styles.underlineStyle}
+                floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
+                onChange={this.handleChangeUsername}
                 onSubmit={this.handleLoginSubmit}
                 onBlur={this.handleBlur('username')}
         /><br />
         <TextField
-                className ={showError('password') ? "error":""}
+                className ={'textField'}
                 hintText="Password"
                 floatingLabelText="Password"
                 type="password"
+                errorText={this.state.errorTextPassword}
                 onKeyPress={e => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -124,7 +150,9 @@ class Login extends Component {
                     }}}
                 value={this.state.password}
                 name = "password"
-                onChange={this.handleChange}
+                underlineFocusStyle = {styles.underlineStyle}
+                floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
+                onChange={this.handleChangePassword}
                 onSubmit={this.handleLoginSubmit}
                 onBlur={this.handleBlur('password')}
         /><br />

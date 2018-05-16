@@ -8,7 +8,9 @@ class JoinRoom extends Component {
     super(props);
     this.state = {
       code: '',
-      name: ''
+      name: '',
+      errorTextCode: '',
+      errorTextName: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,6 +20,12 @@ class JoinRoom extends Component {
   //TODO Form validation
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value.toUpperCase()});
+    if (this.state.errorTextCode != '') {
+        this.setState({errorTextCode: ''});
+    }
+    if (this.state.errorTextName != '') {
+        this.setState({errorTextName: ''});
+    }
   }
 
   callAPI = async () => {
@@ -40,14 +48,28 @@ class JoinRoom extends Component {
               this.props.loginHandler(this.state.code, this.state.name);
             }
             else {
-              console.log("Party doesn't exist.");
+              this.setState({errorTextCode:'Party Doesnt Exist'});
               this.setState({code: ''});
             }
           }).catch(err => console.log(err));
     }
+    else if(this.state.name.length === 0) {
+        this.setState({errorTextName:'Enter a Name'});
+    }
+    else {
+        this.setState({errorTextCode:'Code Must be 5 Characters Long'});
+    }
   }
 
   render() {
+    const styles = {
+        underlineStyle: {
+          borderColor: '#673AB7',
+        },
+        floatingLabelFocusStyle: {
+          color: '#673AB7',
+        },
+    }
     return (
       <div className="joinRoom">
         <h2> Join a Party </h2>
@@ -58,9 +80,12 @@ class JoinRoom extends Component {
             floatingLabelText="Enter a Code"
             name="code"
             maxLength = "5"
+            errorText = {this.state.errorTextCode}
             value ={this.state.code}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}
+            underlineFocusStyle = {styles.underlineStyle}
+            floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
           />
           <br/>
           <TextField
@@ -74,9 +99,12 @@ class JoinRoom extends Component {
                   e.preventDefault();
                   this.handleSubmit(e);
             }}}
+            errorText = {this.state.errorTextName}
             value ={this.state.name}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}
+            underlineFocusStyle = {styles.underlineStyle}
+            floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
           />
           <br/>
           <RaisedButton icon={< ActionHome/>} onClick={this.props.handler} />

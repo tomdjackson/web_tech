@@ -22,7 +22,8 @@ class Host extends Component{
       room: '',
       songs: [],
       song: '',
-      rooms: []
+      rooms: [],
+      errorTextCreate: '',
     }
     this.handleCreateChange = this.handleCreateChange.bind(this);
     this.handleCreateSubmit = this.handleCreateSubmit.bind(this);
@@ -135,6 +136,9 @@ class Host extends Component{
 
   handleCreateChange(e){
     this.setState({newRoom: e.target.value.toLowerCase()});
+    if (this.state.errorTextCreate != '') {
+        this.setState({errorTextCreate: ''});
+    }
   }
 
   handleDeleteChange(v){
@@ -157,9 +161,13 @@ class Host extends Component{
         .catch(err=>console.log(err));
         this.setState({newRoom: '', rooms: newRoomArray});
       }
-      else console.log("room already exists");
+      else {
+        this.setState({errorTextCreate: 'Room already Exists'});
+      }
     }
-    else console.log("no input");
+    else {
+        this.setState({errorTextCreate: 'No Input'});
+    }
   }
 
   deletePlaylistApi = async () => {
@@ -230,6 +238,14 @@ class Host extends Component{
   }
 
   render(){
+    const styles = {
+        underlineStyle: {
+          borderColor: '#673AB7',
+        },
+        floatingLabelFocusStyle: {
+          color: '#673AB7',
+        },
+    }
     var songs = '', player = '', search = '', deletebutton='';
     if(this.state.room!==''){
       songs = <Suggestion songs={this.state.songs} room={this.state.room} code={this.state.code} handler={this.updateSong}/>
@@ -253,12 +269,15 @@ class Host extends Component{
                 e.preventDefault();
                 this.handleCreateSubmit(e);
               }}}
-              hintText="Room Name"
-              floatingLabelText="Room Name"
-              value={this.state.newRoom}
-              onChange={this.handleCreateChange}
-              onSubmit={this.handleCreateSubmit}
-              />
+            hintText="Room Name"
+            floatingLabelText="Room Name"
+            errorText = {this.state.errorTextCreate}
+            value={this.state.newRoom}
+            onChange={this.handleCreateChange}
+            onSubmit={this.handleCreateSubmit}
+            underlineFocusStyle = {styles.underlineStyle}
+            floatingLabelFocusStyle = {styles.floatingLabelFocusStyle}
+            />
             <RaisedButton label="Create" secondary={true} onClick={this.handleCreateSubmit}/>
             <br/>
           </label>
