@@ -70,7 +70,7 @@ html {
 }
 
 .CreateButton {
-    position:fixed;
+    position:absolute;
     margin-top: 28px;
     margin-left: 15px;
 }

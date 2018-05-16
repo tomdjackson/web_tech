@@ -20,10 +20,10 @@ class JoinRoom extends Component {
   //TODO Form validation
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value.toUpperCase()});
-    if (this.state.errorTextCode != '') {
+    if (this.state.errorTextCode !== '') {
         this.setState({errorTextCode: ''});
     }
-    if (this.state.errorTextName != '') {
+    if (this.state.errorTextName !== '') {
         this.setState({errorTextName: ''});
     }
   }

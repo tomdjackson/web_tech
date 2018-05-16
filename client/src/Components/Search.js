@@ -18,7 +18,7 @@ class Search extends Component {
       results: [],
       hasSearch: false,
       search: '',
-      errorTextSearch: '',      
+      errorTextSearch: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,8 +32,8 @@ class Search extends Component {
   handleChange(e) {
     this.setState({search: e.target.value});
     this.setState({results:[], hasSearch:false});
-    
-    if (this.state.errorTextSearch != '') {
+
+    if (this.state.errorTextSearch !== '') {
         this.setState({errorTextSearch:''});
     }
   }

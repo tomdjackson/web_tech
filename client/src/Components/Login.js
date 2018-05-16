@@ -27,11 +27,11 @@ class Login extends Component {
   //TODO Form validation
   handleChangeUsername(e) {
     this.setState({[e.target.name]: e.target.value});
-    if (this.state.errorTextUsername != '') {
+    if (this.state.errorTextUsername !== '') {
         this.setState({errorTextUsername: ''});
     }
   }
-    
+
   handleChangePassword(e) {
       this.setState({[e.target.name]: e.target.value});
       if (this.state.password.length < 7) {
@@ -97,7 +97,7 @@ class Login extends Component {
       password: password.length < 8
     };
   }
-  
+
   getValidationState(l) {
     if (l > 7) return 'success';
     else if (l > 0) return 'error';
@@ -115,11 +115,6 @@ class Login extends Component {
     }
     const errors = this.validate(this.state.username, this.state.password);
     const isDisabled = Object.keys(errors).some(x => errors[x]);
-    const showError = (field) =>{
-      const hasError = errors[field];
-      const shouldShow = this.state.touched[field];
-      return hasError ? shouldShow: false;
-    }
     return (
       <div className="Login">
         <RaisedButton icon={<ActionHome/>} className='HomeButton' onClick={this.props.handler} /><br/>

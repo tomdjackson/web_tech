@@ -52,17 +52,3 @@ ul{
 RaisedButton {
   margin: 12;
 }
-
-Paper {
-    max-height: 200;
-    width: '80%';
-    overflow: 'auto';
-    margin: 20;
-    textAlign: 'center';
-    display: 'inline-block';
-}
-
-List {
-  maxHeight: '100%';
-  overflow: 'auto';
-}

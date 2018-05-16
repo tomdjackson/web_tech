@@ -105,7 +105,7 @@ class Guest extends Component{
             <br/>
             <SelectRoom rooms={this.state.rooms} handler = {this.roomSelectHandler}/>
             <br/>
-            <Search room={this.state.room} code={this.state.code}/>
+            <Search handler={this.suggestHandler} room={this.state.room} code={this.state.code}/>
             <br/>
             <Suggestion songs={this.state.songs} room={this.state.room} code={this.state.code} handler={this.suggestHandler}/>
           </div>

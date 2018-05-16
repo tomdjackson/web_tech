@@ -39,6 +39,8 @@ class Host extends Component{
     this.getSongs = this.getSongs.bind(this);
     this.callSongsApi = this.callSongsApi.bind(this);
     this.getRooms = this.getRooms.bind(this);
+    this.handler = this.handler.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   componentWillUnmount(){
@@ -61,24 +63,37 @@ class Host extends Component{
     .catch(err => console.log(err));
   }
 
+  reset = async () => {
+    var room = this.state.room;
+    this.setState({room: ''});
+    await fetch('/api/resetplayed', {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({playlist: room+this.state.code})
+    }).then(res=>{console.log("here"); this.setState({room: room})
+    }).catch(err => console.log(err));
+    this.getSongs();
+  }
+
   getSongs(){
     if(this.state.room === ''){
       setTimeout(this.getSongs, 50);
       return;
     }
+    this.setState({song: ''});
     this.callSongsApi()
     .then(res=>{
       this.setState({songs:res.songs})
-      var index = 0;
-      var empty = false;
-      while(res.songs[index].played === 1 && !empty){
-        index++;
-        if(index>res.songs.length){
-          empty = true;
-          index = 0;
+      for(var i=0; i < res.songs.length; i++){
+        if(res.songs[i].played===0){
+          this.setState({song: this.state.songs[i]});
+          break;
         }
       }
-      this.setState({song: this.state.songs[index]});
+      if(this.state.song === ''){
+        this.reset();
+        return;
+      }
     })
     .catch(err => console.log(err));
   }
@@ -135,7 +150,7 @@ class Host extends Component{
 
   handleCreateChange(e){
     this.setState({newRoom: e.target.value.toLowerCase()});
-    if (this.state.errorTextCreate != '') {
+    if (this.state.errorTextCreate !== '') {
         this.setState({errorTextCreate: ''});
     }
   }
@@ -221,7 +236,7 @@ class Host extends Component{
     const response = await fetch('/api/played', {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({code: this.state.song.key})
+      body: JSON.stringify({key: this.state.song.key})
     });
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -234,6 +249,10 @@ class Host extends Component{
     .catch(err=>console.log(err));
     this.setState({song: ''});
     this.getSongs();
+  }
+
+  handler(){
+    this.setState(this.state);
   }
 
   render(){

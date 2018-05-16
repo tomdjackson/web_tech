@@ -124,13 +124,20 @@ app.post('/api/getsongs', (req, res) =>{
 });
 
 app.post('/api/played', (req, res) =>{
-  //TODO THIS ISN'T UPDATING
-  var played = 1;
-  db.run("UPDATE songs SET played=? WHERE key=?", [played, req.body.key], (err, value)=>{
+  db.run("UPDATE songs SET played=1 WHERE key=?", [req.body.key], (err)=>{
     if(err) return console.error(err.message);
     res.send({success: true});
-  })
-})
+  });
+});
+
+app.post('/api/resetplayed', (req, res) =>{
+  console.log("here");
+  console.log(req.body.playlist);
+  db.run("Update songs SET played=0 WHERE playlist_id=?", [req.body.playlist], (err)=>{
+    if(err) return console.error(err.message);
+    res.send(true);
+  });
+});
 
 app.post('/api/upvote', (req, res) => {
   db.get("SELECT votes FROM songs WHERE key=?", [req.body.key], (err, value)=>{

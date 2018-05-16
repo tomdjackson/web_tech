@@ -7,9 +7,6 @@ import './../css/Results.css'
 class Result extends Component{
   constructor(){
     super();
-    this.state={
-      song: ''
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -40,9 +37,19 @@ class Result extends Component{
       <Item r={r} handler={this.handleSubmit}/>
     ));
     return (
-      <Paper zDepth={3}>
-        Search Results
-        <List >
+      <Paper
+        style={{
+          maxHeight: 200,
+          width: '80%',
+          overflow: 'auto',
+          margin: 20,
+          textAlign: 'center',
+          display: 'inline-block'
+        }}
+        zDepth={3}
+      >
+        <h4>Search Results</h4>
+        <List style={{maxHeight: '80%', overflow: 'auto'}}>
           {options}
         </List>
       </Paper>

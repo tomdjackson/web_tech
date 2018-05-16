@@ -6,6 +6,10 @@ RaisedButton {
   padding: 20;
 }
 
+Search {
+  display: 'inline-block';
+}
+
 .Login{
   maxWidth: 400;
   margin: '0 auto 10px';
@@ -16,5 +20,5 @@ RaisedButton {
 }
 
 .Delete  {
-  display: 'inline';
+  display: 'inline' !import;
 }
