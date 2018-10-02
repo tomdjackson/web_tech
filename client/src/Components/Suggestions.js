@@ -62,7 +62,7 @@ class Suggestions extends Component{
     if(this.props.songs.length>0){
       songs = this.props.songs.map((r) => {
         if(r.played === 0){ return (
-          <Song r={r} handleUpvote={this.handleUpvoteSubmit} handleDownvote={this.handleDownvoteSubmit}/>
+          <Song key={r.key} r={r} handleUpvote={this.handleUpvoteSubmit} handleDownvote={this.handleDownvoteSubmit}/>
         )
       }
       else return null;

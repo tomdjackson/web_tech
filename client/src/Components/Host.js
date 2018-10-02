@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {TextField, RaisedButton} from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -70,7 +71,7 @@ class Host extends Component{
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({playlist: room+this.state.code})
-    }).then(res=>{console.log("here"); this.setState({room: room})
+    }).then(res=>{this.setState({room: room})
     }).catch(err => console.log(err));
     this.getSongs();
   }

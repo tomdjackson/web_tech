@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { RaisedButton, TextField} from 'material-ui';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import './../css/Host.css';
 

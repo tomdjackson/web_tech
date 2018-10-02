@@ -9,24 +9,16 @@
   "dependencies": {
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
-    "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-force-ssl": "^0.3.2",
-    "express-session": "^1.15.6",
     "google-auth-library": "^1.4.0",
     "googleapis": "^29.0.0",
-    "material-ui": "^1.0.0-beta.47",
     "nodemon": "^1.17.3",
     "npm": "^6.0.1",
     "package.json": "^2.0.1",
     "randomstring": "^1.1.5",
-    "react-bootstrap": "^0.32.1",
-    "react-confirm-alert": "^2.0.2",
-    "react-dom": "^16.3.2",
-    "react-scripts": "^1.1.4",
-    "react-transition-group": "^2.3.1",
-    "react-youtube": "^7.6.0",
-    "sqlite3": "^4.0.0"
+    "sqlite3": "^4.0.0",
+    "youtube-search": "^1.1.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
